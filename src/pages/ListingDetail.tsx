@@ -1,0 +1,225 @@
+import { Link, useParams } from "react-router-dom";
+import PageShell from "../components/PageShell";
+import GrenadaMap from "../components/GrenadaMap";
+import { LISTINGS } from "../data/listings";
+
+export default function ListingDetail() {
+  const { id } = useParams<{ id: string }>();
+  const listing = LISTINGS.find((l) => l.id === id);
+
+  if (!listing) {
+    return (
+      <PageShell title="Listing not found" subtitle="That property may have been delisted.">
+        <Link
+          to="/listings"
+          className="liquid-glass-strong rounded-full px-5 py-2.5 inline-flex text-sm font-medium font-body text-white"
+        >
+          Back to all listings
+        </Link>
+      </PageShell>
+    );
+  }
+
+  // SealScore (computed from data we already have)
+  const score = computeSealScore(listing);
+  const similar = LISTINGS
+    .filter((l) => l.id !== listing.id && l.neighborhood === listing.neighborhood)
+    .slice(0, 3);
+
+  return (
+    <PageShell
+      kicker={listing.neighborhood}
+      title={listing.title}
+      subtitle={`${listing.bedrooms} bedroom · ${listing.bathrooms} bathroom · sleeps ${listing.occupancy} · ${listing.walkToCampus} min walk to SGU.`}
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-2">
+        {/* Photo */}
+        <div
+          className="lg:col-span-2 liquid-glass overflow-hidden"
+          style={{ borderRadius: "1.25rem" }}
+        >
+          <img
+            src={listing.thumb}
+            alt=""
+            onError={(e) => {
+              const t = e.currentTarget;
+              if (!t.dataset.fallback) {
+                t.dataset.fallback = "1";
+                t.src =
+                  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1400&q=75&auto=format&fit=crop";
+              }
+            }}
+            className="w-full aspect-[16/9] object-cover"
+          />
+        </div>
+
+        {/* Sticky reservation panel */}
+        <aside
+          className="liquid-glass p-6 flex flex-col gap-5 self-start"
+          style={{ borderRadius: "1.25rem", position: "sticky", top: 96 }}
+        >
+          <div>
+            <span className="text-xs font-body text-white/70">Monthly rent</span>
+            <p className="font-heading text-white text-5xl tracking-[-1px] leading-none mt-1">
+              ${listing.price.toLocaleString()}
+            </p>
+          </div>
+          {listing.sealApproved && (
+            <span className="bg-sealOrange text-white rounded-full px-3 py-1 text-xs font-body font-semibold self-start">
+              Seal Approved · refund-backed deposit
+            </span>
+          )}
+          <Link
+            to="/for-students"
+            className="liquid-glass-strong rounded-full px-5 py-2.5 text-sm font-medium font-body text-white inline-flex justify-center"
+          >
+            Reserve this stay
+          </Link>
+          <Link
+            to="/lease-dna-scanner"
+            className="text-sm font-body text-white/90 underline-offset-4 hover:underline self-start"
+          >
+            Run the lease through Lease DNA Scanner →
+          </Link>
+        </aside>
+
+        {/* About */}
+        <section
+          className="lg:col-span-2 liquid-glass p-6"
+          style={{ borderRadius: "1.25rem" }}
+        >
+          <h2 className="font-heading text-white text-3xl tracking-[-1px] leading-none">
+            About this stay
+          </h2>
+          <p className="mt-4 text-sm md:text-base font-body font-light text-white/90 leading-snug">
+            {listing.blurb}
+          </p>
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Stat label="Bedrooms" value={listing.bedrooms.toString()} />
+            <Stat label="Bathrooms" value={listing.bathrooms.toString()} />
+            <Stat label="Sleeps" value={listing.occupancy.toString()} />
+            <Stat label="To SGU" value={`${listing.walkToCampus} min`} />
+          </div>
+        </section>
+
+        {/* SealScore */}
+        <section
+          className="liquid-glass p-6"
+          style={{ borderRadius: "1.25rem" }}
+        >
+          <p className="text-xs font-body text-white/70">SealScore</p>
+          <div className="mt-1 flex items-baseline gap-2">
+            <span className="font-heading text-white text-5xl tracking-[-1px] leading-none">
+              {score.total}
+            </span>
+            <span className="text-xs font-body text-white/70">/ 100</span>
+          </div>
+          <ul className="mt-4 space-y-2">
+            {score.facets.map((f) => (
+              <li key={f.label} className="flex items-center gap-3">
+                <span className="text-[11px] font-body text-white/70 w-24 shrink-0">
+                  {f.label}
+                </span>
+                <span className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <span
+                    className="block h-full bg-sealOrange"
+                    style={{ width: `${f.value}%` }}
+                  />
+                </span>
+                <span className="text-[11px] font-body text-white/85 w-8 text-right">
+                  {f.value}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Map */}
+        <section
+          className="lg:col-span-3"
+        >
+          <p className="text-xs font-body text-white/70 mb-2">// On the map</p>
+          <GrenadaMap
+            listings={LISTINGS}
+            highlightId={listing.id}
+            height={400}
+          />
+        </section>
+
+        {/* Similar */}
+        {similar.length > 0 && (
+          <section className="lg:col-span-3">
+            <p className="text-xs font-body text-white/70 mb-3">
+              // More in {listing.neighborhood}
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {similar.map((l) => (
+                <Link
+                  key={l.id}
+                  to={`/listings/${l.id}`}
+                  className="liquid-glass overflow-hidden flex flex-col group"
+                  style={{ borderRadius: "1rem" }}
+                >
+                  <img
+                    src={l.thumb}
+                    alt=""
+                    className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                  <div className="p-4">
+                    <h3 className="font-heading text-white text-xl tracking-[-0.5px] leading-none">
+                      {l.title}
+                    </h3>
+                    <p className="mt-1 text-[11px] font-body font-light text-white/70">
+                      {l.bedrooms} BR · ${l.price.toLocaleString()}/mo
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </PageShell>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div
+      className="liquid-glass p-3 text-center"
+      style={{ borderRadius: "0.85rem" }}
+    >
+      <p className="font-heading text-white text-2xl tracking-[-0.5px] leading-none">
+        {value}
+      </p>
+      <p className="mt-1 text-[11px] font-body font-light text-white/70">
+        {label}
+      </p>
+    </div>
+  );
+}
+
+/** Lightweight SealScore — inputs we already have. Replace with the full
+ *  rubric once survey + inspection data lands. */
+function computeSealScore(l: { walkToCampus: number; price: number; sealApproved: boolean; bedrooms: number }) {
+  const walk = clamp(100 - (l.walkToCampus - 4) * 6, 30, 100);
+  const value = clamp(100 - Math.max(0, (l.price - 800) / 30), 30, 100);
+  const safety = l.sealApproved ? 92 : 70;
+  const wifi = 78; // proxy until we measure
+  const generator = l.price > 1500 ? 88 : 70;
+  const facets = [
+    { label: "Walk to SGU", value: Math.round(walk) },
+    { label: "Value", value: Math.round(value) },
+    { label: "Safety", value: safety },
+    { label: "Wi-Fi", value: wifi },
+    { label: "Generator", value: generator },
+  ];
+  const total = Math.round(
+    facets.reduce((s, f) => s + f.value, 0) / facets.length,
+  );
+  return { total, facets };
+}
+
+function clamp(n: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, n));
+}
