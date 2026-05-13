@@ -192,9 +192,10 @@ function RevealBand() {
   // Top word slides left, bottom word slides right (opposite directions)
   const xLeft = useTransform(scrollYProgress, [0, 1], ["20%", "-40%"]);
   const xRight = useTransform(scrollYProgress, [0, 1], ["-40%", "20%"]);
-  // Reveal mask grows from 0 → 100% width
-  const reveal = useTransform(scrollYProgress, [0.2, 0.8], ["0%", "100%"]);
-  const subOpacity = useTransform(scrollYProgress, [0.4, 0.7], [0, 1]);
+  // Finish the statement reveal near mid-scroll so it lands with the parallax,
+  // instead of waiting until the section is almost gone.
+  const reveal = useTransform(scrollYProgress, [0.12, 0.52], ["0%", "100%"]);
+  const subOpacity = useTransform(scrollYProgress, [0.26, 0.5], [0, 1]);
 
   return (
     <section
