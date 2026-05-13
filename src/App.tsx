@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Listings from "./pages/Listings";
 import ListingDetail from "./pages/ListingDetail";
@@ -15,6 +15,8 @@ import SealScore from "./pages/SealScore";
 import ListProperty from "./pages/ListProperty";
 import ClaimListing from "./pages/ClaimListing";
 import LandlordShield from "./pages/LandlordShield";
+import AdminLogin from "./pages/AdminLogin";
+import LegalCompliance from "./pages/LegalCompliance";
 import SimpleStub from "./pages/SimpleStub";
 import { AuthProvider } from "./context/AuthContext";
 import SignInModal from "./components/SignInModal";
@@ -24,8 +26,20 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <SignInModal />
-        <div className="flex flex-col min-h-screen">
+        <AppFrame />
+      </BrowserRouter>
+    </AuthProvider>
+  );
+}
+
+function AppFrame() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+
+  return (
+    <>
+      <SignInModal />
+      <div className="flex flex-col min-h-screen">
         <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/listings" element={<Listings />} />
@@ -45,17 +59,11 @@ export default function App() {
         <Route path="/claim-listing" element={<ClaimListing />} />
         <Route
           path="/legal-compliance"
-          element={
-            <SimpleStub
-              kicker="Legal & Compliance"
-              title="How we stay on the right side of Grenada law"
-              subtitle="Property registration, ECCB-compliant escrow, tenancy ordinance alignment."
-            />
-          }
+          element={<LegalCompliance />}
         />
         <Route
           path="/admin/login"
-          element={<SimpleStub kicker="Admin" title="Sign in" />}
+          element={<AdminLogin />}
         />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
@@ -69,9 +77,8 @@ export default function App() {
           }
         />
         </Routes>
-        <Footer />
-        </div>
-      </BrowserRouter>
-    </AuthProvider>
+        {!isAdmin && <Footer />}
+      </div>
+    </>
   );
 }
