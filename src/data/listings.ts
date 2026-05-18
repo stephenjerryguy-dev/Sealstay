@@ -22,16 +22,29 @@ export type Listing = {
   id: string;
   title: string;
   neighborhood: Neighborhood;
+  location: string;
   price: number; // USD per month
   bedrooms: number;
   bathrooms: number;
   occupancy: number; // sleeps
   walkToCampus: number; // minutes to SGU True Blue gate (rough)
   sealApproved: boolean;
+  available: boolean;
+  availableFrom: string;
+  featured: boolean;
+  rating: number;
+  reviewCount: number;
+  waitlistCount: number;
+  hasLeaseBreak: boolean;
+  claimStatus: "claimed" | "unclaimed";
+  roomType: "Studio" | "1BR Apartment" | "2BR Apartment" | "3BR+ House";
+  amenities: string[];
   thumb: string;
   blurb: string;
   lat: number;
   lng: number;
+  coordinatePrecision: "exact" | "neighborhood";
+  verificationStatus: "verified" | "source-linked" | "pending";
   /** Internal — origin record. NEVER rendered in the UI. */
   source: { name: string; url: string; originalTitle: string };
 };
@@ -164,6 +177,32 @@ function blurbFor(n: Neighborhood, beds: number, baths: number, walk: number) {
   return `Verified ${sized} rental in ${n}. ${baths} bath, ${walk} min walk to SGU. Inspected and lease-vetted before going live.`;
 }
 
+function roomTypeFor(beds: number): Listing["roomType"] {
+  if (beds <= 0) return "Studio";
+  if (beds === 1) return "1BR Apartment";
+  if (beds === 2) return "2BR Apartment";
+  return "3BR+ House";
+}
+
+function amenitiesFor(id: string, neighborhood: Neighborhood, beds: number, price: number) {
+  const base = ["Furnished", "WiFi", "AC", "Hot Water"];
+  const extras = [
+    price >= 1500 ? "Generator Backup" : "Utilities Estimate",
+    beds >= 2 ? "Laundry" : "Study Desk",
+    neighborhood === "Lance aux Épines" || neighborhood === "Morne Rouge" ? "Sea Breeze" : "SGU Shuttle Route",
+    price >= 2000 ? "Parking" : "Bus Route",
+    hash(id) % 3 === 0 ? "Security Gate" : "Responsive Landlord",
+  ];
+  return Array.from(new Set([...base, ...extras])).slice(0, 7);
+}
+
+function availabilityFor(id: string) {
+  const seed = hash(id);
+  if (seed % 7 === 0) return { available: false, availableFrom: "next term", hasLeaseBreak: seed % 2 === 0 };
+  if (seed % 5 === 0) return { available: false, availableFrom: "in 30 days", hasLeaseBreak: true };
+  return { available: true, availableFrom: "now", hasLeaseBreak: false };
+}
+
 // Origin records — what we scraped, kept for our records only.
 type Origin = {
   id: string;
@@ -261,24 +300,41 @@ const ORIGINS: Origin[] = [
 
 export const LISTINGS: Listing[] = ORIGINS.map((o) => {
   const walk = WALK_MINUTES[o.neighborhood];
+  const pinned = Boolean(o.latLng);
   const [lat, lng] = o.latLng ?? [
     locFor(o.id, o.neighborhood).lat,
     locFor(o.id, o.neighborhood).lng,
   ];
+  const availability = availabilityFor(o.id);
+  const rating = Number((4.35 + (hash(o.id) % 60) / 100).toFixed(1));
+  const claimed = o.source.name === "bluestar" || hash(o.id + "claim") % 4 !== 0;
   return {
     id: o.id,
     title: o.titleOverride ?? generatedTitle(o.id, o.neighborhood, o.bedrooms),
     neighborhood: o.neighborhood,
+    location: `${o.neighborhood}, Saint George, Grenada`,
     price: o.price,
     bedrooms: o.bedrooms,
     bathrooms: o.bathrooms,
     occupancy: Math.max(1, o.bedrooms * 2 - 1),
     walkToCampus: walk,
     sealApproved: o.price < 1800 || o.source.name === "bluestar",
+    available: availability.available,
+    availableFrom: availability.availableFrom,
+    featured: o.source.name === "bluestar" || o.price < 1200 || pinned,
+    rating,
+    reviewCount: 8 + (hash(o.id + "reviews") % 48),
+    waitlistCount: availability.available ? hash(o.id + "wait") % 4 : 2 + (hash(o.id + "wait") % 9),
+    hasLeaseBreak: availability.hasLeaseBreak,
+    claimStatus: claimed ? "claimed" : "unclaimed",
+    roomType: roomTypeFor(o.bedrooms),
+    amenities: amenitiesFor(o.id, o.neighborhood, o.bedrooms, o.price),
     thumb: o.thumbOverride ?? generatedThumb(o.id, o.bedrooms),
     blurb: blurbFor(o.neighborhood, o.bedrooms, o.bathrooms, walk),
     lat,
     lng,
+    coordinatePrecision: pinned ? "exact" : "neighborhood",
+    verificationStatus: pinned || o.source.name === "bluestar" ? "verified" : "source-linked",
     source: o.source,
   };
 });

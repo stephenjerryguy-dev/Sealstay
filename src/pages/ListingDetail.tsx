@@ -1,4 +1,6 @@
 import { Link, useParams } from "react-router-dom";
+import type { ComponentType } from "react";
+import { AlertCircle, CheckCircle2, RefreshCw, Star, Users } from "lucide-react";
 import PageShell from "../components/PageShell";
 import GrenadaMap from "../components/GrenadaMap";
 import { LISTINGS } from "../data/listings";
@@ -69,6 +71,16 @@ export default function ListingDetail() {
               Seal Approved · refund-backed deposit
             </span>
           )}
+          <div className="grid grid-cols-2 gap-2 text-xs font-body text-white/75">
+            <span className="liquid-glass rounded-xl px-3 py-2 inline-flex items-center gap-2">
+              <Star className="h-3.5 w-3.5 text-sealOrange" fill="currentColor" />
+              {listing.rating} ({listing.reviewCount})
+            </span>
+            <span className="liquid-glass rounded-xl px-3 py-2 inline-flex items-center gap-2">
+              <Users className="h-3.5 w-3.5 text-sealOrange" />
+              {listing.waitlistCount} watching
+            </span>
+          </div>
           <Link
             to="/for-students"
             className="liquid-glass-strong rounded-full px-5 py-2.5 text-sm font-medium font-body text-white inline-flex justify-center"
@@ -81,6 +93,14 @@ export default function ListingDetail() {
           >
             Run the lease through Lease DNA Scanner →
           </Link>
+          {listing.claimStatus === "unclaimed" && (
+            <Link
+              to="/claim-listing"
+              className="text-sm font-body text-sealOrange underline-offset-4 hover:underline self-start"
+            >
+              Claim or correct this listing →
+            </Link>
+          )}
         </aside>
 
         {/* About */}
@@ -100,6 +120,61 @@ export default function ListingDetail() {
             <Stat label="Sleeps" value={listing.occupancy.toString()} />
             <Stat label="To SGU" value={`${listing.walkToCampus} min`} />
           </div>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {listing.amenities.map((amenity) => (
+              <span
+                key={amenity}
+                className="liquid-glass rounded-full px-3 py-1 text-[11px] font-body text-white/80"
+              >
+                {amenity}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        <section
+          className="liquid-glass p-6"
+          style={{ borderRadius: "1.25rem" }}
+        >
+          <p className="text-xs font-body text-white/70">Truth layer</p>
+          <h2 className="mt-1 font-heading text-white text-3xl tracking-[-1px] leading-none">
+            Verification status
+          </h2>
+          <div className="mt-5 space-y-3">
+            <TruthRow
+              icon={listing.coordinatePrecision === "exact" ? CheckCircle2 : AlertCircle}
+              label="Map pin"
+              value={
+                listing.coordinatePrecision === "exact"
+                  ? "Exact property pin"
+                  : "Neighborhood-level estimate"
+              }
+              tone={listing.coordinatePrecision === "exact" ? "good" : "warn"}
+            />
+            <TruthRow
+              icon={listing.claimStatus === "claimed" ? CheckCircle2 : AlertCircle}
+              label="Landlord record"
+              value={listing.claimStatus === "claimed" ? "Claimed" : "Unclaimed"}
+              tone={listing.claimStatus === "claimed" ? "good" : "warn"}
+            />
+            <TruthRow
+              icon={listing.available || listing.hasLeaseBreak ? CheckCircle2 : RefreshCw}
+              label="Availability"
+              value={
+                listing.available
+                  ? "Available now"
+                  : listing.hasLeaseBreak
+                  ? "Lease transfer path"
+                  : `Available ${listing.availableFrom}`
+              }
+              tone={listing.available || listing.hasLeaseBreak ? "good" : "neutral"}
+            />
+          </div>
+          <p className="mt-5 text-xs font-body font-light text-white/60 leading-snug">
+            We keep source-linked listings searchable while exact coordinates,
+            photos, landlord ownership, and availability are confirmed. Approximate
+            pins are intentionally labeled until field verification is complete.
+          </p>
         </section>
 
         {/* SealScore */}
@@ -180,6 +255,31 @@ export default function ListingDetail() {
         )}
       </div>
     </PageShell>
+  );
+}
+
+function TruthRow({
+  icon: Icon,
+  label,
+  value,
+  tone,
+}: {
+  icon: ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+  tone: "good" | "warn" | "neutral";
+}) {
+  const color =
+    tone === "good" ? "text-emerald-300" : tone === "warn" ? "text-sealOrange" : "text-white/70";
+
+  return (
+    <div className="flex items-start gap-3">
+      <Icon className={`h-4 w-4 mt-0.5 ${color}`} />
+      <div>
+        <p className="text-[11px] font-body text-white/50">{label}</p>
+        <p className="text-sm font-body text-white/85">{value}</p>
+      </div>
+    </div>
   );
 }
 

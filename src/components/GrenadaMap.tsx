@@ -133,6 +133,18 @@ export default function GrenadaMap({
                 <div
                   style={{
                     fontFamily: "Barlow, sans-serif",
+                    fontSize: 11,
+                    marginTop: 4,
+                    color: l.coordinatePrecision === "exact" ? "#047857" : "#a16207",
+                  }}
+                >
+                  {l.coordinatePrecision === "exact"
+                    ? "Exact property pin"
+                    : "Approximate neighborhood pin"}
+                </div>
+                <div
+                  style={{
+                    fontFamily: "Barlow, sans-serif",
                     marginTop: 6,
                     color: "#0a1426",
                   }}
