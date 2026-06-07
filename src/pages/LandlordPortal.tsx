@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PageShell from "../components/PageShell";
 import ProtectedPage from "../components/ProtectedPage";
 import { useAuth } from "../context/AuthContext";
-import { LISTINGS } from "../data/listings";
+import { LISTINGS, priceLabel } from "../data/listings";
 
 export default function LandlordPortal() {
   return (
@@ -80,7 +80,7 @@ function Inner() {
                     {l.title}
                   </p>
                   <p className="mt-1 text-[11px] font-body font-light text-white/70">
-                    {l.neighborhood} · {l.bedrooms} BR · ${l.price.toLocaleString()}/mo
+                    {l.neighborhood} · {l.bedrooms} BR · {priceLabel(l)}
                   </p>
                 </div>
                 <span className="liquid-glass rounded-full px-2.5 py-1 text-[10px] font-body text-white whitespace-nowrap">

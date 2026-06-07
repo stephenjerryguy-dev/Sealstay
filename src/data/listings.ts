@@ -24,6 +24,7 @@ export type Listing = {
   neighborhood: Neighborhood;
   location: string;
   price: number; // USD per month
+  priceDisplay?: string;
   bedrooms: number;
   bathrooms: number;
   occupancy: number; // sleeps
@@ -40,6 +41,8 @@ export type Listing = {
   roomType: "Studio" | "1BR Apartment" | "2BR Apartment" | "3BR+ House";
   amenities: string[];
   thumb: string;
+  mediaStatus: "rights-cleared-placeholder" | "owner-provided" | "generated-replica-needed";
+  sourceLastChecked: string;
   blurb: string;
   lat: number;
   lng: number;
@@ -208,6 +211,7 @@ type Origin = {
   id: string;
   neighborhood: Neighborhood;
   price: number;
+  priceDisplay?: string;
   bedrooms: number;
   bathrooms: number;
   /** Override the auto-generated title (for landmark properties whose own
@@ -215,8 +219,11 @@ type Origin = {
   titleOverride?: string;
   /** Override the auto-generated thumb (rare). */
   thumbOverride?: string;
+  /** Publicly visible media is never copied from agent sites unless licensed. */
+  mediaStatus?: Listing["mediaStatus"];
   /** Pin the lat/lng instead of jittering around the centroid. */
   latLng?: [number, number];
+  sourceLastChecked?: string;
   source: { name: string; url: string; originalTitle: string };
 };
 
@@ -262,6 +269,9 @@ const ORIGINS: Origin[] = [
   { id: "lae-027", neighborhood: "Lance aux Épines", price: 1000, bedrooms: 2, bathrooms: 2, source: { name: "mcb", url: "https://mcb-realty.com/listings/house-of-jabari/", originalTitle: "House of Jabari" } },
   { id: "lae-028", neighborhood: "Lance aux Épines", price: 1100, bedrooms: 1, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/1-bedroom-1-bathroom-lance-aux-epines-rental/", originalTitle: "Red Hibiscus 1" } },
   { id: "wst-002", neighborhood: "Westerhall", price: 1100, bedrooms: 2, bathrooms: 2, source: { name: "mcb", url: "https://mcb-realty.com/listings/old-westerhall-apartment2/", originalTitle: "Old Westerhall Apartment 2" } },
+  { id: "lae-mcb-ellens", neighborhood: "Lance aux Épines", price: 750, bedrooms: 2, bathrooms: 1, sourceLastChecked: "2026-06-07", source: { name: "mcb", url: "https://mcb-realty.com/listings/ellens-apartments-lance-aux-epines/", originalTitle: "Ellen's Apartments" } },
+  { id: "lae-mcb-apartment3", neighborhood: "Lance aux Épines", price: 1600, bedrooms: 3, bathrooms: 2, sourceLastChecked: "2026-06-07", source: { name: "mcb", url: "https://mcb-realty.com/listings/lance-aux-epines-apartment3/", originalTitle: "Lance Aux Epines Apartment3" } },
+  { id: "lae-villamar", neighborhood: "Lance aux Épines", price: 0, priceDisplay: "Contact for rate", bedrooms: 1, bathrooms: 1, titleOverride: "Villamar Apartments · Furnished Studios", mediaStatus: "generated-replica-needed", sourceLastChecked: "2026-06-07", source: { name: "villamar", url: "https://www.villamargrenada.com/", originalTitle: "Villamar Apartments" } },
 
   // Blue Star Apartments & Hotel — Lance aux Épines entrance, has its own
   // shuttle to SGU. Brand-name property kept named (per user request).
@@ -314,11 +324,12 @@ export const LISTINGS: Listing[] = ORIGINS.map((o) => {
     neighborhood: o.neighborhood,
     location: `${o.neighborhood}, Saint George, Grenada`,
     price: o.price,
+    priceDisplay: o.priceDisplay,
     bedrooms: o.bedrooms,
     bathrooms: o.bathrooms,
     occupancy: Math.max(1, o.bedrooms * 2 - 1),
     walkToCampus: walk,
-    sealApproved: o.price < 1800 || o.source.name === "bluestar",
+    sealApproved: (o.price > 0 && o.price < 1800) || o.source.name === "bluestar",
     available: availability.available,
     availableFrom: availability.availableFrom,
     featured: o.source.name === "bluestar" || o.price < 1200 || pinned,
@@ -330,6 +341,8 @@ export const LISTINGS: Listing[] = ORIGINS.map((o) => {
     roomType: roomTypeFor(o.bedrooms),
     amenities: amenitiesFor(o.id, o.neighborhood, o.bedrooms, o.price),
     thumb: o.thumbOverride ?? generatedThumb(o.id, o.bedrooms),
+    mediaStatus: o.mediaStatus ?? "rights-cleared-placeholder",
+    sourceLastChecked: o.sourceLastChecked ?? "2026-05-18",
     blurb: blurbFor(o.neighborhood, o.bedrooms, o.bathrooms, walk),
     lat,
     lng,
@@ -345,4 +358,8 @@ export const NEIGHBORHOODS: Neighborhood[] = Array.from(
 
 export function listingsByNeighborhood(n: Neighborhood) {
   return LISTINGS.filter((l) => l.neighborhood === n);
+}
+
+export function priceLabel(l: Pick<Listing, "price" | "priceDisplay">) {
+  return l.priceDisplay ?? `$${l.price.toLocaleString()}/mo`;
 }

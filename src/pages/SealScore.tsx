@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import PageShell from "../components/PageShell";
-import { LISTINGS } from "../data/listings";
+import { LISTINGS, priceLabel } from "../data/listings";
 
 const FACETS: Array<{ key: string; label: string; weight: number; body: string }> = [
   {
@@ -116,7 +116,7 @@ export default function SealScore() {
                     {l.title}
                   </p>
                   <p className="mt-1 text-[11px] font-body font-light text-white/70">
-                    {l.neighborhood} · {l.bedrooms} BR · ${l.price.toLocaleString()}/mo
+                    {l.neighborhood} · {l.bedrooms} BR · {priceLabel(l)}
                   </p>
                 </div>
                 <div className="text-right">
@@ -144,7 +144,7 @@ export default function SealScore() {
 
 function simpleScore(l: { walkToCampus: number; price: number; sealApproved: boolean }) {
   const walk = clamp(100 - (l.walkToCampus - 4) * 6, 30, 100);
-  const value = clamp(100 - Math.max(0, (l.price - 800) / 30), 30, 100);
+  const value = l.price > 0 ? clamp(100 - Math.max(0, (l.price - 800) / 30), 30, 100) : 70;
   const safety = l.sealApproved ? 92 : 70;
   const wifi = 78;
   const generator = l.price > 1500 ? 88 : 70;

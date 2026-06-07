@@ -3,7 +3,7 @@ import type { ComponentType } from "react";
 import { AlertCircle, CheckCircle2, RefreshCw, Star, Users } from "lucide-react";
 import PageShell from "../components/PageShell";
 import GrenadaMap from "../components/GrenadaMap";
-import { LISTINGS } from "../data/listings";
+import { LISTINGS, priceLabel } from "../data/listings";
 
 export default function ListingDetail() {
   const { id } = useParams<{ id: string }>();
@@ -63,8 +63,11 @@ export default function ListingDetail() {
           <div>
             <span className="text-xs font-body text-white/70">Monthly rent</span>
             <p className="font-heading text-white text-5xl tracking-[-1px] leading-none mt-1">
-              ${listing.price.toLocaleString()}
+              {priceLabel(listing).replace("/mo", "")}
             </p>
+            {!listing.priceDisplay && (
+              <span className="text-xs font-body text-white/70">USD / month</span>
+            )}
           </div>
           {listing.sealApproved && (
             <span className="bg-sealOrange text-white rounded-full px-3 py-1 text-xs font-body font-semibold self-start">
@@ -169,6 +172,24 @@ export default function ListingDetail() {
               }
               tone={listing.available || listing.hasLeaseBreak ? "good" : "neutral"}
             />
+            <TruthRow
+              icon={listing.mediaStatus === "owner-provided" ? CheckCircle2 : AlertCircle}
+              label="Public media"
+              value={
+                listing.mediaStatus === "owner-provided"
+                  ? "Owner-provided / rights-cleared"
+                  : listing.mediaStatus === "generated-replica-needed"
+                  ? "Needs rights-cleared replacement"
+                  : "Rights-cleared placeholder; agent photos not used"
+              }
+              tone={listing.mediaStatus === "owner-provided" ? "good" : "warn"}
+            />
+            <TruthRow
+              icon={CheckCircle2}
+              label="Source checked"
+              value={`${listing.source.name} · ${listing.sourceLastChecked}`}
+              tone="neutral"
+            />
           </div>
           <p className="mt-5 text-xs font-body font-light text-white/60 leading-snug">
             We keep source-linked listings searchable while exact coordinates,
@@ -245,7 +266,7 @@ export default function ListingDetail() {
                       {l.title}
                     </h3>
                     <p className="mt-1 text-[11px] font-body font-light text-white/70">
-                      {l.bedrooms} BR · ${l.price.toLocaleString()}/mo
+                      {l.bedrooms} BR · {priceLabel(l)}
                     </p>
                   </div>
                 </Link>

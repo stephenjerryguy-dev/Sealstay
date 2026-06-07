@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import AIDisputeAgent from "../components/AIDisputeAgent";
 import GrenadaMap from "../components/GrenadaMap";
-import { LISTINGS } from "../data/listings";
+import { LISTINGS, priceLabel } from "../data/listings";
 import { clearAdminSession, getAdminSession, type AdminSession } from "./AdminLogin";
 
 type TabId =
@@ -82,7 +82,8 @@ export default function AdminDashboard() {
   const stats = useMemo(() => {
     const total = LISTINGS.length;
     const verified = LISTINGS.filter((l) => l.sealApproved).length;
-    const avgRent = Math.round(LISTINGS.reduce((s, l) => s + l.price, 0) / total);
+    const pricedListings = LISTINGS.filter((l) => l.price > 0);
+    const avgRent = Math.round(pricedListings.reduce((s, l) => s + l.price, 0) / pricedListings.length);
     const minWalk = Math.min(...LISTINGS.map((l) => l.walkToCampus));
     return { total, verified, avgRent, minWalk };
   }, []);
@@ -233,7 +234,7 @@ function ListingsOps() {
             <img src={listing.thumb} alt="" className="h-16 w-16 shrink-0 object-cover" style={{ borderRadius: "0.7rem" }} />
             <div className="min-w-0 flex-1">
               <p className="truncate font-heading text-xl leading-none text-white">{listing.title}</p>
-              <p className="mt-1 truncate text-xs text-white/55">{listing.neighborhood} · ${listing.price.toLocaleString()}/mo</p>
+              <p className="mt-1 truncate text-xs text-white/55">{listing.neighborhood} · {priceLabel(listing)}</p>
             </div>
             <span className="rounded-full bg-sealOrange/15 px-2.5 py-1 text-[10px] text-sealOrange">
               {state}

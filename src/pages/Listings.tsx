@@ -18,6 +18,7 @@ import GrenadaMap from "../components/GrenadaMap";
 import {
   LISTINGS,
   NEIGHBORHOODS,
+  priceLabel,
   type Listing,
   type Neighborhood,
 } from "../data/listings";
@@ -71,7 +72,7 @@ export default function Listings() {
       return (
         matchesQuery &&
         (hood === "All" || listing.neighborhood === hood) &&
-        listing.price <= maxPrice &&
+        (listing.price === 0 || listing.price <= maxPrice) &&
         (selectedTypes.length === 0 || selectedTypes.includes(listing.roomType)) &&
         (!sealApprovedOnly || listing.sealApproved) &&
         (!availableOnly || listing.available || listing.hasLeaseBreak) &&
@@ -80,8 +81,8 @@ export default function Listings() {
     });
 
     return result.sort((a, b) => {
-      if (sortBy === "price-asc") return a.price - b.price;
-      if (sortBy === "price-desc") return b.price - a.price;
+      if (sortBy === "price-asc") return comparablePrice(a) - comparablePrice(b);
+      if (sortBy === "price-desc") return comparablePrice(b) - comparablePrice(a);
       if (sortBy === "rating") return b.rating - a.rating;
       if (sortBy === "campus") return a.walkToCampus - b.walkToCampus;
       return Number(b.featured) - Number(a.featured) || a.price - b.price;
@@ -449,9 +450,11 @@ function ListingCard({
         <div className="mt-auto pt-5 flex items-center justify-between gap-3">
           <span>
             <span className="font-heading text-white text-3xl tracking-[-1px]">
-              ${listing.price.toLocaleString()}
+              {priceLabel(listing).replace("/mo", "")}
             </span>
-            <span className="text-xs font-body text-white/70 ml-1">/ mo</span>
+            {!listing.priceDisplay && (
+              <span className="text-xs font-body text-white/70 ml-1">/ mo</span>
+            )}
           </span>
           <Link
             to={`/listings/${listing.id}`}
@@ -463,6 +466,10 @@ function ListingCard({
       </div>
     </article>
   );
+}
+
+function comparablePrice(listing: Listing) {
+  return listing.price > 0 ? listing.price : Number.POSITIVE_INFINITY;
 }
 
 function Toggle({

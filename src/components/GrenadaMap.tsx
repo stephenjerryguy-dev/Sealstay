@@ -3,13 +3,13 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { divIcon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Link } from "react-router-dom";
-import type { Listing } from "../data/listings";
+import { priceLabel, type Listing } from "../data/listings";
 
 // Approximate centroid of southern Grenada (SGU + Lance aux Épines + Grand Anse)
 const GRENADA_CENTER: [number, number] = [12.018, -61.748];
 
 // Custom orange pin in HTML (matches the seal mascot)
-function pinIcon(price: number) {
+function pinIcon(label: string) {
   return divIcon({
     className: "sealstay-pin",
     iconSize: [56, 28],
@@ -21,7 +21,7 @@ function pinIcon(price: number) {
       padding:4px 10px;border-radius:9999px;
       box-shadow:0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.25);
       white-space:nowrap;letter-spacing:-.01em;
-    ">$${price.toLocaleString()}</div>`,
+    ">${label}</div>`,
   });
 }
 
@@ -105,7 +105,7 @@ export default function GrenadaMap({
           <Marker
             key={l.id}
             position={[l.lat, l.lng]}
-            icon={pinIcon(l.price)}
+            icon={pinIcon(l.priceDisplay ? "Contact" : `$${l.price.toLocaleString()}`)}
           >
             <Popup>
               <div style={{ minWidth: 200 }}>
@@ -149,8 +149,8 @@ export default function GrenadaMap({
                     color: "#0a1426",
                   }}
                 >
-                  <strong>${l.price.toLocaleString()}</strong>
-                  <span style={{ color: "#5a6478" }}> / mo</span>
+                  <strong>{priceLabel(l).replace("/mo", "")}</strong>
+                  {!l.priceDisplay && <span style={{ color: "#5a6478" }}> / mo</span>}
                 </div>
                 <Link
                   to={`/listings/${l.id}`}

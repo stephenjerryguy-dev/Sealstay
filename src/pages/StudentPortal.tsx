@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import PageShell from "../components/PageShell";
 import ProtectedPage from "../components/ProtectedPage";
 import { useAuth } from "../context/AuthContext";
-import { LISTINGS } from "../data/listings";
+import { LISTINGS, priceLabel } from "../data/listings";
 
 export default function StudentPortal() {
   return (
@@ -42,7 +42,7 @@ function Inner() {
           </div>
           <p className="mt-2 text-sm font-body font-light text-white/80">
             {reservation.neighborhood} · {reservation.bedrooms} BR ·{" "}
-            {reservation.walkToCampus} min to SGU · ${reservation.price.toLocaleString()}/mo
+            {reservation.walkToCampus} min to SGU · {priceLabel(reservation)}
           </p>
           <div className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
             <Step label="Lease decoded" done />
@@ -139,7 +139,7 @@ function Inner() {
                     {l.title}
                   </p>
                   <p className="mt-1 text-[11px] font-body font-light text-white/75">
-                    {l.neighborhood} · ${l.price.toLocaleString()}/mo
+                    {l.neighborhood} · {priceLabel(l)}
                   </p>
                 </div>
               </Link>

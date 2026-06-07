@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import PageShell from "../components/PageShell";
-import { LISTINGS } from "../data/listings";
+import { LISTINGS, priceLabel } from "../data/listings";
 
 export default function ClaimListing() {
   const [q, setQ] = useState("");
@@ -58,7 +58,7 @@ export default function ClaimListing() {
                     {l.title}
                   </p>
                   <p className="mt-1 text-[11px] font-body font-light text-white/70">
-                    {l.neighborhood} · {l.bedrooms} BR · ${l.price.toLocaleString()}/mo
+                    {l.neighborhood} · {l.bedrooms} BR · {priceLabel(l)}
                   </p>
                 </div>
                 <button
