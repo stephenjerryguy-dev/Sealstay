@@ -97,7 +97,7 @@ function Inner() {
           style={{ borderRadius: "1.5rem" }}
         >
           <div>
-            <p className="text-xs font-body text-white/70">// Tenants</p>
+            <p className="text-xs font-body text-sealSky/80">// Tenants</p>
             <ul className="mt-3 flex flex-col gap-2">
               {tenants.map((t) => {
                 const property = portfolio.find((p) => p.id === t.listingId);
@@ -136,7 +136,7 @@ function Inner() {
           </div>
 
           <div>
-            <p className="text-xs font-body text-white/70">// Maintenance</p>
+            <p className="text-xs font-body text-sealSky/80">// Maintenance</p>
             <ul className="mt-3 flex flex-col gap-2">
               {tickets.map((t, i) => (
                 <li

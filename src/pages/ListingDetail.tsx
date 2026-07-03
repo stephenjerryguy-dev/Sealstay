@@ -70,23 +70,23 @@ export default function ListingDetail() {
             )}
           </div>
           {listing.sealApproved && (
-            <span className="bg-sealOrange text-white rounded-full px-3 py-1 text-xs font-body font-semibold self-start">
+            <span className="bg-sealGreen text-white rounded-full px-3 py-1 text-xs font-body font-semibold self-start">
               Seal Approved · refund-backed deposit
             </span>
           )}
           <div className="grid grid-cols-2 gap-2 text-xs font-body text-white/75">
             <span className="liquid-glass rounded-xl px-3 py-2 inline-flex items-center gap-2">
-              <Star className="h-3.5 w-3.5 text-sealOrange" fill="currentColor" />
+              <Star className="h-3.5 w-3.5 text-sealAmber" fill="currentColor" />
               {listing.rating} ({listing.reviewCount})
             </span>
             <span className="liquid-glass rounded-xl px-3 py-2 inline-flex items-center gap-2">
-              <Users className="h-3.5 w-3.5 text-sealOrange" />
+              <Users className="h-3.5 w-3.5 text-sealSky" />
               {listing.waitlistCount} watching
             </span>
           </div>
           <Link
             to="/for-students"
-            className="liquid-glass-strong rounded-full px-5 py-2.5 text-sm font-medium font-body text-white inline-flex justify-center"
+            className="bg-sealOrange hover:bg-sealOrangeDeep transition-colors rounded-full px-5 py-2.5 text-sm font-medium font-body text-white inline-flex justify-center"
           >
             Reserve this stay
           </Link>
@@ -218,7 +218,7 @@ export default function ListingDetail() {
                 </span>
                 <span className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
                   <span
-                    className="block h-full bg-sealOrange"
+                    className={`block h-full ${f.value >= 85 ? "bg-sealGreen" : f.value >= 60 ? "bg-sealSky" : "bg-sealAmber"}`}
                     style={{ width: `${f.value}%` }}
                   />
                 </span>
@@ -234,7 +234,7 @@ export default function ListingDetail() {
         <section
           className="lg:col-span-3"
         >
-          <p className="text-xs font-body text-white/70 mb-2">// On the map</p>
+          <p className="text-xs font-body text-sealSky/80 mb-2">// On the map</p>
           <GrenadaMap
             listings={LISTINGS}
             highlightId={listing.id}
@@ -245,7 +245,7 @@ export default function ListingDetail() {
         {/* Similar */}
         {similar.length > 0 && (
           <section className="lg:col-span-3">
-            <p className="text-xs font-body text-white/70 mb-3">
+            <p className="text-xs font-body text-sealSky/80 mb-3">
               // More in {listing.neighborhood}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -291,7 +291,7 @@ function TruthRow({
   tone: "good" | "warn" | "neutral";
 }) {
   const color =
-    tone === "good" ? "text-emerald-300" : tone === "warn" ? "text-sealOrange" : "text-white/70";
+    tone === "good" ? "text-sealGreen" : tone === "warn" ? "text-sealAmber" : "text-sealSky/70";
 
   return (
     <div className="flex items-start gap-3">

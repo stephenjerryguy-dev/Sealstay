@@ -101,7 +101,7 @@ export default function LeaseRelief() {
           className="liquid-glass p-6 flex flex-col gap-3"
           style={{ borderRadius: "1.5rem" }}
         >
-          <p className="text-xs font-body text-white/70">// Pick a situation</p>
+          <p className="text-xs font-body text-sealSky/80">// Pick a situation</p>
           {PATHS.map((p) => (
             <button
               key={p.id}
@@ -137,7 +137,7 @@ export default function LeaseRelief() {
           className="lg:col-span-2 liquid-glass p-6"
           style={{ borderRadius: "1.5rem" }}
         >
-          <p className="text-xs font-body text-white/70">// Playbook</p>
+          <p className="text-xs font-body text-sealSky/80">// Playbook</p>
           <h2 className="mt-1 font-heading text-white text-3xl md:text-4xl tracking-[-1px] leading-none">
             {PATHS.find((p) => p.id === path)?.label}
           </h2>

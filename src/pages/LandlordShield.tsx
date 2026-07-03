@@ -75,7 +75,7 @@ export default function LandlordShield() {
       </div>
 
       <div className="mt-12">
-        <p className="text-xs font-body text-white/70 mb-4">// Pricing</p>
+        <p className="text-xs font-body text-sealSky/80 mb-4">// Pricing</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {PRICING.map((p) => (
             <div

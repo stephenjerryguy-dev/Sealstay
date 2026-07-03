@@ -88,7 +88,7 @@ function Hero() {
             style={{ y: badgeY, opacity: badgeOpacity }}
             className="liquid-glass rounded-full inline-flex items-center gap-2 pl-1 py-1 pr-3"
           >
-            <span className="bg-white text-black rounded-full px-3 py-1 text-xs font-semibold font-body">
+            <span className="bg-sealOrange text-white rounded-full px-3 py-1 text-xs font-semibold font-body">
               New
             </span>
             <span className="text-sm text-white/90 font-body">
@@ -118,7 +118,7 @@ function Hero() {
           <motion.div {...blur(1.1)} className="flex items-center gap-6 mt-6">
             <Link
               to="/listings"
-              className="liquid-glass-strong rounded-full px-5 py-2.5 text-sm font-medium font-body text-white inline-flex items-center gap-1.5"
+              className="bg-sealOrange hover:bg-sealOrangeDeep transition-colors rounded-full px-5 py-2.5 text-sm font-medium font-body text-white inline-flex items-center gap-1.5"
             >
               Start Your Search
               <ArrowUpRight className="h-5 w-5" />
@@ -128,7 +128,7 @@ function Hero() {
               className="text-white text-sm font-medium font-body inline-flex items-center gap-1.5"
             >
               Watch the Tour
-              <Play className="h-4 w-4 fill-white" />
+              <Play className="h-4 w-4 fill-sealSky text-sealSky" />
             </button>
           </motion.div>
 
@@ -170,7 +170,7 @@ function StatCard({
 }) {
   return (
     <div className="liquid-glass p-5 w-[220px] text-left" style={{ borderRadius: "1.25rem" }}>
-      <div className="text-white">{icon}</div>
+      <div className="text-sealSky">{icon}</div>
       <div className="font-heading text-white text-4xl tracking-[-1px] leading-none mt-3">
         {value}
       </div>
@@ -200,7 +200,7 @@ function RevealBand() {
   return (
     <section
       ref={ref}
-      className="relative w-screen min-h-[80vh] overflow-hidden bg-sealNavyDeep flex flex-col justify-center py-32"
+      className="relative w-screen min-h-[80vh] overflow-hidden flex flex-col justify-center py-32"
     >
       <motion.div
         style={{ x: xLeft }}
@@ -210,24 +210,22 @@ function RevealBand() {
       </motion.div>
       <motion.div
         style={{ x: xRight }}
-        className="font-heading italic text-white/30 text-[18vw] leading-[0.85] tracking-[-0.04em] whitespace-nowrap will-change-transform mt-[-2vw]"
+        className="font-heading italic text-sealSky/40 text-[18vw] leading-[0.85] tracking-[-0.04em] whitespace-nowrap will-change-transform mt-[-2vw]"
       >
         worth staying for
       </motion.div>
 
       <div className="px-8 md:px-16 lg:px-20 mt-16 max-w-3xl">
-        <p className="text-sm font-body text-white/60 mb-3">// What we built</p>
+        <p className="text-sm font-body text-sealSky/80 mb-3">// What we built</p>
         <div className="relative">
-          <p className="text-2xl md:text-3xl font-body font-light text-white/90 leading-snug">
+          <motion.p
+            className="text-2xl md:text-3xl font-body font-light text-white/90 leading-snug"
+            style={{ clipPath: useTransform(reveal, (v) => `inset(0 calc(100% - ${v}) 0 0)`) }}
+          >
             We came to Grenada to study. We stayed because the island earns it
             every day. SealStay is the housing layer underneath that
             — built by students, for students, with the people who live here.
-          </p>
-          <motion.div
-            className="absolute inset-0 bg-sealNavyDeep"
-            style={{ width: useTransform(reveal, (v) => `calc(100% - ${v})`) }}
-            aria-hidden
-          />
+          </motion.p>
         </div>
         <motion.p
           className="mt-6 text-sm font-body text-white/70"
@@ -277,7 +275,7 @@ function NeighborhoodsRail() {
       trackVh={3.5}
       header={
         <div className="max-w-3xl">
-          <p className="text-sm font-body text-white/80 mb-4">
+          <p className="text-sm font-body text-sealSky/80 mb-4">
             // Neighborhoods
           </p>
           <h2 className="font-heading text-white text-5xl md:text-6xl lg:text-7xl leading-[0.9] tracking-[-2px]">
@@ -326,7 +324,7 @@ function RailCard({
           <h3 className="font-heading text-white text-4xl tracking-[-1px] leading-none">
             {name}
           </h3>
-          <span className="text-xs font-body font-light text-white/70 whitespace-nowrap">
+          <span className="text-xs font-body font-medium text-sealSky whitespace-nowrap">
             {walk}
           </span>
         </div>
@@ -354,6 +352,7 @@ function CapabilitiesStack() {
     {
       eyebrow: "01",
       icon: ShieldIcon,
+      accent: "text-sealGreen",
       title: "SealShield",
       tags: ["Inspected", "Insured", "Lease Vetted", "Refund Backed"],
       body: "Every listing is physically inspected and lease-reviewed before it goes live. If a verified property misrepresents itself, your deposit is refunded.",
@@ -361,6 +360,7 @@ function CapabilitiesStack() {
     {
       eyebrow: "02",
       icon: SparklesIcon,
+      accent: "text-sealViolet",
       title: "Lease DNA Scanner",
       tags: ["Plain English", "Risk Flags", "Redline Draft", "Free"],
       body: "Drop your lease in. Our AI translates the legalese into plain English, flags clauses that hurt students, and drafts the redline back to your landlord.",
@@ -368,6 +368,7 @@ function CapabilitiesStack() {
     {
       eyebrow: "03",
       icon: BoltIcon,
+      accent: "text-sealSky",
       title: "SealScore",
       tags: ["Walkability", "Generator", "Hurricane", "Wi-Fi Speed"],
       body: "Each property gets scored on walk to SGU, generator backup, hurricane history, and student-life fit — so the photo isn't the only thing telling the story.",
@@ -389,7 +390,7 @@ function CapabilitiesStack() {
       <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/40 via-black/20 to-black/70" />
 
       <div className="relative z-10 px-8 md:px-16 lg:px-20 pt-32">
-        <p className="text-sm font-body text-white/80 mb-4">// Capabilities</p>
+        <p className="text-sm font-body text-sealSky/80 mb-4">// Capabilities</p>
         <h2 className="font-heading text-white text-6xl md:text-7xl lg:text-[6rem] leading-[0.9] tracking-[-3px] max-w-4xl">
           Housing
           <br />
@@ -414,6 +415,7 @@ function StickyCard({
   total,
   eyebrow,
   icon: Icon,
+  accent,
   title,
   tags,
   body,
@@ -422,6 +424,7 @@ function StickyCard({
   total: number;
   eyebrow: string;
   icon: React.ComponentType<{ className?: string }>;
+  accent: string;
   title: string;
   tags: string[];
   body: string;
@@ -452,9 +455,9 @@ function StickyCard({
               className="liquid-glass flex items-center justify-center"
               style={{ width: 56, height: 56, borderRadius: "1rem" }}
             >
-              <Icon className="h-7 w-7 text-white" />
+              <Icon className={`h-7 w-7 ${accent}`} />
             </div>
-            <div className="font-heading italic text-white/40 text-3xl tracking-[-1px] leading-none">
+            <div className="font-heading italic text-sealOrange/60 text-3xl tracking-[-1px] leading-none">
               {eyebrow}
             </div>
           </div>
@@ -495,26 +498,26 @@ function Outro() {
   return (
     <section
       ref={ref}
-      className="relative w-screen min-h-[80vh] overflow-hidden bg-sealNavyDeep flex items-center justify-center px-8"
+      className="relative w-screen min-h-[80vh] overflow-hidden flex items-center justify-center px-8"
     >
       <motion.div className="text-center max-w-3xl" style={{ y, scale }}>
-        <p className="text-sm font-body text-white/60 mb-6">// Ready</p>
+        <p className="text-sm font-body text-sealSky/80 mb-6">// Ready</p>
         <h2 className="font-heading italic text-white text-6xl md:text-7xl lg:text-[7rem] leading-[0.85] tracking-[-3px]">
           your stay,
           <br />
-          waiting
+          <span className="text-sealSky">waiting</span>
         </h2>
         <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
           <Link
             to="/listings"
-            className="liquid-glass-strong rounded-full px-6 py-3 text-base font-medium font-body text-white inline-flex items-center gap-2"
+            className="bg-sealOrange hover:bg-sealOrangeDeep transition-colors rounded-full px-6 py-3 text-base font-medium font-body text-white inline-flex items-center gap-2"
           >
             Browse listings
             <ArrowUpRight className="h-5 w-5" />
           </Link>
           <Link
             to="/lease-dna-scanner"
-            className="text-base font-body text-white/90 hover:text-white"
+            className="text-base font-body text-sealSky hover:text-white transition-colors"
           >
             Try the Lease DNA Scanner →
           </Link>

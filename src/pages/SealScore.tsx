@@ -61,7 +61,7 @@ export default function SealScore() {
           className="liquid-glass p-6"
           style={{ borderRadius: "1.5rem" }}
         >
-          <p className="text-xs font-body text-white/70">// Rubric</p>
+          <p className="text-xs font-body text-sealSky/80">// Rubric</p>
           <h2 className="mt-1 font-heading text-white text-3xl tracking-[-1px] leading-none">
             What we measure
           </h2>
@@ -93,7 +93,7 @@ export default function SealScore() {
           className="liquid-glass p-6"
           style={{ borderRadius: "1.5rem" }}
         >
-          <p className="text-xs font-body text-white/70">// Top scorers</p>
+          <p className="text-xs font-body text-sealSky/80">// Top scorers</p>
           <h2 className="mt-1 font-heading text-white text-3xl tracking-[-1px] leading-none">
             Highest-rated rentals
           </h2>

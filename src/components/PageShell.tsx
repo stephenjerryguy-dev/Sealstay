@@ -15,7 +15,7 @@ type Props = {
 // liquid-glass kicker + serif headline, then page content beneath.
 export default function PageShell({ kicker, title, subtitle, children }: Props) {
   return (
-    <section className="relative w-screen min-h-screen overflow-hidden bg-sealNavyDeep">
+    <section className="relative w-screen min-h-screen overflow-hidden">
       <FadingVideo
         src={AMBIENT_VIDEO}
         className="absolute inset-0 w-full h-full object-cover z-0"
@@ -29,7 +29,7 @@ export default function PageShell({ kicker, title, subtitle, children }: Props) 
 
         <header className="px-8 md:px-16 lg:px-20 pt-32 pb-10">
           {kicker && (
-            <p className="text-sm font-body text-white/80 mb-4">// {kicker}</p>
+            <p className="text-sm font-body text-sealSky/80 mb-4">// {kicker}</p>
           )}
           <h1 className="font-heading text-white text-5xl md:text-6xl lg:text-7xl leading-[0.9] tracking-[-2px] max-w-4xl">
             {title}

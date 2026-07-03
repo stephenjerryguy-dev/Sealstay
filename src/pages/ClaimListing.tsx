@@ -87,7 +87,7 @@ export default function ClaimListing() {
           className="liquid-glass p-6"
           style={{ borderRadius: "1.5rem" }}
         >
-          <p className="text-xs font-body text-white/70">// How we verify</p>
+          <p className="text-xs font-body text-sealSky/80">// How we verify</p>
           <ol className="mt-3 flex flex-col gap-3">
             {[
               "We send a confirmation code to a phone number on file with the registry.",

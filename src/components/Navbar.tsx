@@ -29,7 +29,7 @@ export default function Navbar() {
               end={l.to === "/"}
               className={({ isActive }) =>
                 `px-3 py-2 text-sm font-medium font-body rounded-full whitespace-nowrap transition-colors ${
-                  isActive ? "text-white" : "text-white/80 hover:text-white"
+                  isActive ? "text-sealSky" : "text-white/80 hover:text-sealSky"
                 }`
               }
             >
@@ -39,7 +39,7 @@ export default function Navbar() {
           {user ? (
             <Link
               to={user.role === "landlord" ? "/landlord-portal" : user.role === "admin" ? "/admin/dashboard" : "/student-portal"}
-              className="bg-white text-black rounded-full px-4 py-2 text-sm font-medium font-body whitespace-nowrap inline-flex items-center gap-1 ml-1.5 hover:bg-white/90"
+              className="bg-sealOrange text-white rounded-full px-4 py-2 text-sm font-medium font-body whitespace-nowrap inline-flex items-center gap-1 ml-1.5 hover:bg-sealOrangeDeep transition-colors"
             >
               {user.name.split(" ")[0] || "Portal"}
               <ArrowUpRight className="h-4 w-4" />
@@ -48,7 +48,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={promptSignIn}
-              className="bg-white text-black rounded-full px-4 py-2 text-sm font-medium font-body whitespace-nowrap inline-flex items-center gap-1 ml-1.5 hover:bg-white/90"
+              className="bg-sealOrange text-white rounded-full px-4 py-2 text-sm font-medium font-body whitespace-nowrap inline-flex items-center gap-1 ml-1.5 hover:bg-sealOrangeDeep transition-colors"
             >
               Sign In
               <ArrowUpRight className="h-4 w-4" />

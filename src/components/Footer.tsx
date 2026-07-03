@@ -33,7 +33,7 @@ const COLS: { heading: string; links: { label: string; to: string }[] }[] = [
 
 export default function Footer() {
   return (
-    <footer className="relative w-screen px-8 md:px-16 lg:px-20 pt-20 pb-10 bg-sealNavyDeep">
+    <footer className="relative w-screen px-8 md:px-16 lg:px-20 pt-20 pb-10 border-t border-sealCharcoal/60">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 max-w-7xl">
         <div>
           <SealMark withTagline size={56} />
@@ -44,7 +44,7 @@ export default function Footer() {
         </div>
         {COLS.map((col) => (
           <div key={col.heading}>
-            <p className="text-[11px] font-body uppercase tracking-[0.22em] text-white/55">
+            <p className="text-[11px] font-body uppercase tracking-[0.22em] text-sealSky/70">
               {col.heading}
             </p>
             <ul className="mt-4 flex flex-col gap-2.5">
@@ -52,7 +52,7 @@ export default function Footer() {
                 <li key={l.to}>
                   <Link
                     to={l.to}
-                    className="text-sm font-body text-white/85 hover:text-white"
+                    className="text-sm font-body text-white/85 hover:text-sealSky transition-colors"
                   >
                     {l.label}
                   </Link>

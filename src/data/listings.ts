@@ -16,7 +16,9 @@ export type Neighborhood =
   | "Morne Rouge"
   | "Frequente"
   | "Westerhall"
-  | "Golf Course";
+  | "Golf Course"
+  | "Calliste"
+  | "Point Salines";
 
 export type Listing = {
   id: string;
@@ -61,6 +63,8 @@ const HOOD_CENTROID: Record<Neighborhood, [number, number]> = {
   Frequente: [12.0355, -61.7493],
   Westerhall: [12.0033, -61.6992],
   "Golf Course": [12.0316, -61.7466],
+  Calliste: [12.0055, -61.7715],
+  "Point Salines": [12.0065, -61.7838],
 };
 
 const WALK_MINUTES: Record<Neighborhood, number> = {
@@ -72,6 +76,8 @@ const WALK_MINUTES: Record<Neighborhood, number> = {
   Frequente: 22,
   "St. George's": 25,
   Westerhall: 18,
+  Calliste: 11,
+  "Point Salines": 18,
 };
 
 // Variants used to generate generic, agency-free titles. The seed id picks
@@ -119,7 +125,7 @@ const PHOTO_POOL_INTERIOR = [
   "1568605114967-8130f3a36994", // white stucco apartment exterior
   "1522708323590-d24dbb6b0267", // cozy bedroom
   "1505693416388-ac5ce068fe85", // bright tropical interior
-  "1556228578-8c89e6adf883",     // beach-house living room
+  "1484154218962-a197022b5858", // bright apartment kitchen
   "1567767292278-a4f21aa2d36e", // clean white interior
   "1505873242700-f289a29e1e0f", // tropical balcony interior
 ];
@@ -228,49 +234,107 @@ type Origin = {
 };
 
 const ORIGINS: Origin[] = [
-  // Copal Real Estate
-  { id: "lae-001", neighborhood: "Lance aux Épines", price: 4200, bedrooms: 4, bathrooms: 4, source: { name: "copal", url: "https://copalrealestate.com/properties/casera-iv/", originalTitle: "Casera IV" } },
-  { id: "lae-002", neighborhood: "Lance aux Épines", price: 2000, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/romer-iii-ii/", originalTitle: "Romer III-II" } },
+  // Copal Real Estate — full /rent/ inventory re-checked 2026-07-03.
+  // Lance aux Épines
   { id: "lae-003", neighborhood: "Lance aux Épines", price: 935, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/villma-i/", originalTitle: "Villma I" } },
-  { id: "lae-004", neighborhood: "Lance aux Épines", price: 1150, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/ravine-i-8/", originalTitle: "Ravine I (8)" } },
-  { id: "lae-005", neighborhood: "Lance aux Épines", price: 950, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/ravine-i-4/", originalTitle: "Ravine I (4)" } },
-  { id: "lae-006", neighborhood: "Lance aux Épines", price: 1650, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/ravine-ii-a/", originalTitle: "Ravine II (A)" } },
-  { id: "lae-007", neighborhood: "Lance aux Épines", price: 2600, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/dlorian-ii/", originalTitle: "D'Lorian II" } },
+  { id: "lae-006", neighborhood: "Lance aux Épines", price: 1650, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/ravine-ii-a/", originalTitle: "Ravine II (A)" } },
+  { id: "lae-007", neighborhood: "Lance aux Épines", price: 2500, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/dlorian-ii/", originalTitle: "D'Lorian II" } },
   { id: "lae-008", neighborhood: "Lance aux Épines", price: 1500, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/petal-s-5/", originalTitle: "Petal S (5)" } },
-  { id: "lae-009", neighborhood: "Lance aux Épines", price: 1000, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/ravion-ii/", originalTitle: "Ravion II" } },
   { id: "lae-010", neighborhood: "Lance aux Épines", price: 2400, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/petal-ii-3/", originalTitle: "Petal II (3)" } },
-  { id: "lae-011", neighborhood: "Lance aux Épines", price: 1400, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/petal-i-2/", originalTitle: "Petal I (1)" } },
+  { id: "lae-011", neighborhood: "Lance aux Épines", price: 1650, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/petal-i-1/", originalTitle: "Petal I (2)" } },
   { id: "lae-012", neighborhood: "Lance aux Épines", price: 1300, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/harlow-i/", originalTitle: "Harlow I" } },
+  { id: "lae-029", neighborhood: "Lance aux Épines", price: 900, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/victor-i-a-n/", originalTitle: "Victor I (A)" } },
+  { id: "lae-030", neighborhood: "Lance aux Épines", price: 700, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/howard-i/", originalTitle: "Howard I" } },
+  { id: "lae-031", neighborhood: "Lance aux Épines", price: 1000, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/iredale-i/", originalTitle: "Iredale I" } },
+  { id: "lae-032", neighborhood: "Lance aux Épines", price: 1000, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/allen-ii/", originalTitle: "Allen II" } },
+  { id: "lae-033", neighborhood: "Lance aux Épines", price: 1000, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/murray-ii/", originalTitle: "Murray II" } },
+  { id: "lae-034", neighborhood: "Lance aux Épines", price: 1000, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/harlow-s-l/", originalTitle: "Harlow S (L)" } },
+  { id: "lae-035", neighborhood: "Lance aux Épines", price: 1200, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/howard-ii/", originalTitle: "Howard II" } },
+  { id: "lae-036", neighborhood: "Lance aux Épines", price: 1500, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/botanic-view-i/", originalTitle: "Botanic View I" } },
+  { id: "lae-037", neighborhood: "Lance aux Épines", price: 1500, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/harlow-s-u/", originalTitle: "Harlow S (U)" } },
+  { id: "lae-038", neighborhood: "Lance aux Épines", price: 1600, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/jewel-ii/", originalTitle: "Jewel II" } },
+  { id: "lae-039", neighborhood: "Lance aux Épines", price: 1600, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/robbins-ii-4/", originalTitle: "Robbins II (4)" } },
+  { id: "lae-040", neighborhood: "Lance aux Épines", price: 1800, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/petal-i-4/", originalTitle: "Petal I (4)" } },
+  { id: "lae-041", neighborhood: "Lance aux Épines", price: 1800, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/harlow-ii/", originalTitle: "Harlow II" } },
+  { id: "lae-042", neighborhood: "Lance aux Épines", price: 2000, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/iredale-ii/", originalTitle: "Iredale II" } },
+  { id: "lae-043", neighborhood: "Lance aux Épines", price: 2100, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/lilly-grove-ii/", originalTitle: "Lilly Grove II (L)" } },
+  { id: "lae-044", neighborhood: "Lance aux Épines", price: 2400, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/pine-haven-ii/", originalTitle: "Pine Haven II" } },
+  { id: "lae-045", neighborhood: "Lance aux Épines", price: 2600, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/rivian-ii/", originalTitle: "Rivian II" } },
+  { id: "lae-046", neighborhood: "Lance aux Épines", price: 2600, bedrooms: 3, bathrooms: 3, source: { name: "copal", url: "https://copalrealestate.com/properties/jenner-b-iii-u/", originalTitle: "Jenner B III (U)" } },
+  { id: "lae-047", neighborhood: "Lance aux Épines", price: 2700, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/catalania-ii-b/", originalTitle: "Catalania II (B)" } },
+  { id: "lae-048", neighborhood: "Lance aux Épines", price: 3100, bedrooms: 3, bathrooms: 3, source: { name: "copal", url: "https://copalrealestate.com/properties/pine-haven-iii/", originalTitle: "Pine Haven III" } },
+  { id: "lae-049", neighborhood: "Lance aux Épines", price: 5000, bedrooms: 4, bathrooms: 3, source: { name: "copal", url: "https://copalrealestate.com/properties/catalania-iv/", originalTitle: "Catalania IV" } },
+  // True Blue
+  { id: "tbu-002", neighborhood: "True Blue", price: 1500, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/janero-i/", originalTitle: "Janero I" } },
+  { id: "tbu-003", neighborhood: "True Blue", price: 1200, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/mariam-ii/", originalTitle: "Mariam II" } },
+  { id: "tbu-004", neighborhood: "True Blue", price: 1700, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/maldives-ii/", originalTitle: "Maldives II" } },
+  { id: "tbu-005", neighborhood: "True Blue", price: 1400, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/jenner-ii/", originalTitle: "Jenner II" } },
+  { id: "tbu-006", neighborhood: "True Blue", price: 1090, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/calabasas-i-a/", originalTitle: "Calabasas I (A)" } },
+  // Grand Anse
+  { id: "gra-001", neighborhood: "Grand Anse", price: 1200, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/khalifa-s/", originalTitle: "Khalifa S" } },
+  { id: "gra-002", neighborhood: "Grand Anse", price: 720, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/oceanic-s/", originalTitle: "Oceanic S" } },
+  { id: "gra-003", neighborhood: "Grand Anse", price: 850, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/holmes-i/", originalTitle: "Holmes I" } },
+  { id: "gra-004", neighborhood: "Grand Anse", price: 800, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/ponder-i/", originalTitle: "Ponder I" } },
+  { id: "gra-005", neighborhood: "Grand Anse", price: 850, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/meyen-i/", originalTitle: "Meyen I" } },
+  { id: "gra-006", neighborhood: "Grand Anse", price: 1100, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/courtenay-ii-2/", originalTitle: "Courtenay II (B4)" } },
+  { id: "gra-007", neighborhood: "Grand Anse", price: 1200, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/trivers-ii/", originalTitle: "Trivers II" } },
+  { id: "gra-008", neighborhood: "Grand Anse", price: 1300, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/oceanic-ii-b1/", originalTitle: "Oceanic II (B1)" } },
+  { id: "gra-009", neighborhood: "Grand Anse", price: 1400, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/holmes-ii-d/", originalTitle: "Holmes II (D)" } },
+  { id: "gra-010", neighborhood: "Grand Anse", price: 1500, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/ponder-ii/", originalTitle: "Ponder II" } },
+  { id: "gra-011", neighborhood: "Grand Anse", price: 1500, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/aristotle-ii-u-l/", originalTitle: "Aristotle II (U-L)" } },
+  // Morne Rouge
+  { id: "mrn-003", neighborhood: "Morne Rouge", price: 2000, bedrooms: 2, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/valencia-iii-ii-a2/", originalTitle: "Valencia III-II (A2)" } },
+  { id: "mrn-004", neighborhood: "Morne Rouge", price: 2800, bedrooms: 3, bathrooms: 3, source: { name: "copal", url: "https://copalrealestate.com/properties/valencia-iii-a2/", originalTitle: "Valencia III (A2)" } },
+  // Frequente
+  { id: "frq-003", neighborhood: "Frequente", price: 850, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/savana-i-1c/", originalTitle: "Savana I (1C)" } },
+  { id: "frq-004", neighborhood: "Frequente", price: 850, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/savana-i-1b/", originalTitle: "Savana I (1B)" } },
+  { id: "frq-005", neighborhood: "Frequente", price: 1050, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/hamilton-ii/", originalTitle: "Hamilton II" } },
+  { id: "frq-006", neighborhood: "Frequente", price: 1350, bedrooms: 3, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/hamilton-iii/", originalTitle: "Hamilton III" } },
+  { id: "frq-007", neighborhood: "Frequente", price: 1400, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/ibarra-ii-a/", originalTitle: "Ibarra II (A)" } },
+  { id: "frq-008", neighborhood: "Frequente", price: 1400, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/ibarra-ii-b/", originalTitle: "Ibarra II (B)" } },
+  { id: "frq-009", neighborhood: "Frequente", price: 1800, bedrooms: 3, bathrooms: 2, source: { name: "copal", url: "https://copalrealestate.com/properties/pearl-iii/", originalTitle: "Pearl III" } },
+  // Golf Course
+  { id: "glf-002", neighborhood: "Golf Course", price: 1200, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/autumn-ii/", originalTitle: "Autumn II" } },
+  // Calliste
+  { id: "cal-001", neighborhood: "Calliste", price: 700, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/windsor-s-ll-2/", originalTitle: "Windsor S (LL-2)" } },
+  { id: "cal-002", neighborhood: "Calliste", price: 850, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/persoon-ii-1/", originalTitle: "Persoon II (1)" } },
+  { id: "cal-003", neighborhood: "Calliste", price: 1000, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/kadia-i/", originalTitle: "Kadia I" } },
+  { id: "cal-004", neighborhood: "Calliste", price: 1000, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/grant-i/", originalTitle: "Grant I" } },
+  { id: "cal-005", neighborhood: "Calliste", price: 1200, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/teranova-i-7/", originalTitle: "Teranova I (4 & 7)" } },
+  { id: "cal-006", neighborhood: "Calliste", price: 1400, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/grant-ii/", originalTitle: "Grant II" } },
+  { id: "cal-007", neighborhood: "Calliste", price: 1600, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/teranova-ii-8/", originalTitle: "Teranova II (8)" } },
+  { id: "cal-008", neighborhood: "Calliste", price: 1700, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/nirvana-ii-b/", originalTitle: "Nirvana II (B)" } },
+  // Point Salines
+  { id: "psl-001", neighborhood: "Point Salines", price: 1200, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/landon-i-ky/", originalTitle: "Landon I (KY)" } },
+  { id: "psl-002", neighborhood: "Point Salines", price: 1240, bedrooms: 1, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/zania-i/", originalTitle: "Zania I" } },
+  { id: "psl-003", neighborhood: "Point Salines", price: 1520, bedrooms: 2, bathrooms: 1, source: { name: "copal", url: "https://copalrealestate.com/properties/landon-ii-k3-2/", originalTitle: "Landon II (K3)" } },
 
-  // Century 21 / sgu.rentals
-  { id: "lae-013", neighborhood: "Lance aux Épines", price: 2300, bedrooms: 4, bathrooms: 3, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1181391240", originalTitle: "Jolipad House — 4BD top floor" } },
-  { id: "lae-014", neighborhood: "Lance aux Épines", price: 1300, bedrooms: 2, bathrooms: 2, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1181313952", originalTitle: "Kori 2BD — pet friendly" } },
-  { id: "lae-015", neighborhood: "Lance aux Épines", price: 2000, bedrooms: 2, bathrooms: 1, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1181198967", originalTitle: "Lumi Luxury" } },
-  { id: "lae-016", neighborhood: "Lance aux Épines", price: 1800, bedrooms: 2, bathrooms: 2, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1181001297", originalTitle: "ADLP Luxury Suites" } },
-  { id: "lae-017", neighborhood: "Lance aux Épines", price: 1200, bedrooms: 2, bathrooms: 1, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1180792464", originalTitle: "Luma 2BD" } },
-  { id: "lae-018", neighborhood: "Lance aux Épines", price: 1300, bedrooms: 1, bathrooms: 1, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1180596227", originalTitle: "Water Bungalow Lance aux Épines" } },
-  { id: "lae-019", neighborhood: "Lance aux Épines", price: 1000, bedrooms: 1, bathrooms: 1, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1180375596", originalTitle: "Sarencha Apartments Unit 4" } },
-  { id: "lae-020", neighborhood: "Lance aux Épines", price: 2000, bedrooms: 2, bathrooms: 1, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1180345619", originalTitle: "VP Apartments Unit F" } },
-  { id: "lae-021", neighborhood: "Lance aux Épines", price: 1200, bedrooms: 1, bathrooms: 1, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1180345618", originalTitle: "Oleander — 1BD on SGU bus route" } },
-  { id: "lae-022", neighborhood: "Lance aux Épines", price: 3000, bedrooms: 2, bathrooms: 2, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1180265473", originalTitle: "Marble Luxury G12 — 2BD G122" } },
-  { id: "lae-023", neighborhood: "Lance aux Épines", price: 1460, bedrooms: 2, bathrooms: 1, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1179727395", originalTitle: "LAE Apartments — 2BD" } },
-  { id: "lae-024", neighborhood: "Lance aux Épines", price: 2400, bedrooms: 2, bathrooms: 2, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1179572066", originalTitle: "Flora Bella 2BD ensuite" } },
+  // Century 21 / sgu.rentals — old 2025 listing IDs now return 410 Gone;
+  // replaced with the current featured inventory (checked 2026-07-03).
+  { id: "lae-c21-roylyns", neighborhood: "Lance aux Épines", price: 3000, bedrooms: 3, bathrooms: 3, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1184877361", originalTitle: "Roylyn's Residence — 3BD upper floor" } },
+  { id: "lae-c21-whitehouse", neighborhood: "Lance aux Épines", price: 1800, bedrooms: 2, bathrooms: 1, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1184877362", originalTitle: "White House Apartments" } },
+  { id: "lae-c21-aqua", neighborhood: "Lance aux Épines", price: 1300, bedrooms: 2, bathrooms: 1.5, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1184801616", originalTitle: "Aqua Sunshine — 2BD" } },
+  { id: "mrn-c21-majestic", neighborhood: "Morne Rouge", price: 1350, bedrooms: 1, bathrooms: 2, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1184801615", originalTitle: "The Majestic Suite — Morne Rouge" } },
+  { id: "mrn-c21-studio10", neighborhood: "Morne Rouge", price: 850, bedrooms: 1, bathrooms: 1, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1184801613", originalTitle: "Studio 10 — Study Stay & Beach" } },
+  { id: "mrn-c21-studio9", neighborhood: "Morne Rouge", price: 850, bedrooms: 1, bathrooms: 1, source: { name: "century21", url: "https://www.sgu.rentals/listing-detail/1184801614", originalTitle: "Studio 9 — Study Stay & Beach" } },
 
-  // McB Realty — mixed neighborhoods
-  { id: "frq-001", neighborhood: "Frequente", price: 560, bedrooms: 1, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/frequente-dales-studio-apartment/", originalTitle: "Frequente Dale's Studio" } },
-  { id: "frq-002", neighborhood: "Frequente", price: 665, bedrooms: 1, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/frequent-dales-apartment/", originalTitle: "Frequente Dale's Apartment" } },
-  { id: "lae-025", neighborhood: "Lance aux Épines", price: 750, bedrooms: 1, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/1-bedroom-rental-lance-aux-epines/", originalTitle: "Lioness Apartment" } },
-  { id: "glf-001", neighborhood: "Golf Course", price: 800, bedrooms: 1, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/bethel-gardens1/", originalTitle: "Bethel Gardens 1" } },
-  { id: "mrn-001", neighborhood: "Morne Rouge", price: 800, bedrooms: 1, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/harbour-lights/", originalTitle: "Furnished 1BD — Morne Rouge" } },
-  { id: "mrn-002", neighborhood: "Morne Rouge", price: 800, bedrooms: 1, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/1-bedroom-rental-morne-rouge-st-george/", originalTitle: "Spice House Apartments" } },
-  { id: "lae-026", neighborhood: "Lance aux Épines", price: 850, bedrooms: 1, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/1-bedroom-apartment-lance-aux-epinesred-hibiscus-apartment-2/", originalTitle: "Red Hibiscus 2" } },
-  { id: "tbu-001", neighborhood: "True Blue", price: 900, bedrooms: 1, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/thrillers-apartments1/", originalTitle: "Thriller's Apartments" } },
-  { id: "wst-001", neighborhood: "Westerhall", price: 950, bedrooms: 2, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/old-westerhall-apartment/", originalTitle: "Old Westerhall Apartment" } },
-  { id: "lae-027", neighborhood: "Lance aux Épines", price: 1000, bedrooms: 2, bathrooms: 2, source: { name: "mcb", url: "https://mcb-realty.com/listings/house-of-jabari/", originalTitle: "House of Jabari" } },
-  { id: "lae-028", neighborhood: "Lance aux Épines", price: 1100, bedrooms: 1, bathrooms: 1, source: { name: "mcb", url: "https://mcb-realty.com/listings/1-bedroom-1-bathroom-lance-aux-epines-rental/", originalTitle: "Red Hibiscus 1" } },
-  { id: "wst-002", neighborhood: "Westerhall", price: 1100, bedrooms: 2, bathrooms: 2, source: { name: "mcb", url: "https://mcb-realty.com/listings/old-westerhall-apartment2/", originalTitle: "Old Westerhall Apartment 2" } },
+  // McB Realty — mixed neighborhoods. Spot-checked 2026-07-03 where dated;
+  // remaining entries last confirmed on the dates shown.
+  { id: "frq-001", neighborhood: "Frequente", price: 560, bedrooms: 1, bathrooms: 1, sourceLastChecked: "2026-07-03", source: { name: "mcb", url: "https://mcb-realty.com/listings/frequente-dales-studio-apartment/", originalTitle: "Frequente Dale's Studio" } },
+  { id: "frq-002", neighborhood: "Frequente", price: 665, bedrooms: 1, bathrooms: 1, sourceLastChecked: "2026-07-03", source: { name: "mcb", url: "https://mcb-realty.com/listings/frequent-dales-apartment/", originalTitle: "Frequente Dale's Apartment" } },
+  { id: "lae-025", neighborhood: "Lance aux Épines", price: 750, bedrooms: 1, bathrooms: 1, sourceLastChecked: "2026-07-03", source: { name: "mcb", url: "https://mcb-realty.com/listings/1-bedroom-rental-lance-aux-epines/", originalTitle: "Lioness Apartment" } },
+  { id: "glf-001", neighborhood: "Golf Course", price: 800, bedrooms: 1, bathrooms: 1, sourceLastChecked: "2026-05-18", source: { name: "mcb", url: "https://mcb-realty.com/listings/bethel-gardens1/", originalTitle: "Bethel Gardens 1" } },
+  { id: "mrn-001", neighborhood: "Morne Rouge", price: 800, bedrooms: 1, bathrooms: 1, sourceLastChecked: "2026-05-18", source: { name: "mcb", url: "https://mcb-realty.com/listings/harbour-lights/", originalTitle: "Furnished 1BD — Morne Rouge" } },
+  { id: "mrn-002", neighborhood: "Morne Rouge", price: 800, bedrooms: 1, bathrooms: 1, sourceLastChecked: "2026-05-18", source: { name: "mcb", url: "https://mcb-realty.com/listings/1-bedroom-rental-morne-rouge-st-george/", originalTitle: "Spice House Apartments" } },
+  { id: "lae-026", neighborhood: "Lance aux Épines", price: 850, bedrooms: 1, bathrooms: 1, sourceLastChecked: "2026-05-18", source: { name: "mcb", url: "https://mcb-realty.com/listings/1-bedroom-apartment-lance-aux-epinesred-hibiscus-apartment-2/", originalTitle: "Red Hibiscus 2" } },
+  { id: "tbu-001", neighborhood: "True Blue", price: 900, bedrooms: 1, bathrooms: 1, sourceLastChecked: "2026-07-03", source: { name: "mcb", url: "https://mcb-realty.com/listings/thrillers-apartments1/", originalTitle: "Thriller's Apartments" } },
+  { id: "wst-001", neighborhood: "Westerhall", price: 950, bedrooms: 2, bathrooms: 1, sourceLastChecked: "2026-05-18", source: { name: "mcb", url: "https://mcb-realty.com/listings/old-westerhall-apartment/", originalTitle: "Old Westerhall Apartment" } },
+  { id: "lae-027", neighborhood: "Lance aux Épines", price: 1000, bedrooms: 2, bathrooms: 2, sourceLastChecked: "2026-05-18", source: { name: "mcb", url: "https://mcb-realty.com/listings/house-of-jabari/", originalTitle: "House of Jabari" } },
+  { id: "lae-028", neighborhood: "Lance aux Épines", price: 1100, bedrooms: 1, bathrooms: 1, sourceLastChecked: "2026-05-18", source: { name: "mcb", url: "https://mcb-realty.com/listings/1-bedroom-1-bathroom-lance-aux-epines-rental/", originalTitle: "Red Hibiscus 1" } },
+  { id: "wst-002", neighborhood: "Westerhall", price: 1100, bedrooms: 2, bathrooms: 2, sourceLastChecked: "2026-05-18", source: { name: "mcb", url: "https://mcb-realty.com/listings/old-westerhall-apartment2/", originalTitle: "Old Westerhall Apartment 2" } },
   { id: "lae-mcb-ellens", neighborhood: "Lance aux Épines", price: 750, bedrooms: 2, bathrooms: 1, sourceLastChecked: "2026-06-07", source: { name: "mcb", url: "https://mcb-realty.com/listings/ellens-apartments-lance-aux-epines/", originalTitle: "Ellen's Apartments" } },
   { id: "lae-mcb-apartment3", neighborhood: "Lance aux Épines", price: 1600, bedrooms: 3, bathrooms: 2, sourceLastChecked: "2026-06-07", source: { name: "mcb", url: "https://mcb-realty.com/listings/lance-aux-epines-apartment3/", originalTitle: "Lance Aux Epines Apartment3" } },
+  { id: "lae-mcb-coral", neighborhood: "Lance aux Épines", price: 2350, bedrooms: 3, bathrooms: 2, sourceLastChecked: "2026-07-03", source: { name: "mcb", url: "https://mcb-realty.com/listings/coral-cresent-apartment/", originalTitle: "Coral Cresent Apartment" } },
   { id: "lae-villamar", neighborhood: "Lance aux Épines", price: 0, priceDisplay: "Contact for rate", bedrooms: 1, bathrooms: 1, titleOverride: "Villamar Apartments · Furnished Studios", mediaStatus: "generated-replica-needed", sourceLastChecked: "2026-06-07", source: { name: "villamar", url: "https://www.villamargrenada.com/", originalTitle: "Villamar Apartments" } },
 
   // Blue Star Apartments & Hotel — Lance aux Épines entrance, has its own
@@ -342,7 +406,7 @@ export const LISTINGS: Listing[] = ORIGINS.map((o) => {
     amenities: amenitiesFor(o.id, o.neighborhood, o.bedrooms, o.price),
     thumb: o.thumbOverride ?? generatedThumb(o.id, o.bedrooms),
     mediaStatus: o.mediaStatus ?? "rights-cleared-placeholder",
-    sourceLastChecked: o.sourceLastChecked ?? "2026-05-18",
+    sourceLastChecked: o.sourceLastChecked ?? "2026-07-03",
     blurb: blurbFor(o.neighborhood, o.bedrooms, o.bathrooms, walk),
     lat,
     lng,

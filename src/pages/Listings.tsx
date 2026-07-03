@@ -355,7 +355,7 @@ function ListingCard({
 
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
           {listing.sealApproved && (
-            <Badge tone="orange">
+            <Badge tone="green">
               <CheckCircle2 className="h-3 w-3" />
               Seal Approved
             </Badge>
@@ -367,7 +367,7 @@ function ListingCard({
             </Badge>
           )}
           {listing.hasLeaseBreak && (
-            <Badge tone="orange">
+            <Badge tone="sky">
               <RefreshCw className="h-3 w-3" />
               Transfer
             </Badge>
@@ -377,7 +377,7 @@ function ListingCard({
         <button
           type="button"
           onClick={onToggleSaved}
-          className="absolute top-3 right-3 h-9 w-9 liquid-glass-strong rounded-full flex items-center justify-center text-white"
+          className={`absolute top-3 right-3 h-9 w-9 liquid-glass-strong rounded-full flex items-center justify-center transition-colors ${saved ? "text-sealOrange" : "text-white"}`}
           aria-label={saved ? "Remove saved listing" : "Save listing"}
         >
           <Heart className="h-4 w-4" fill={saved ? "currentColor" : "none"} />
@@ -399,7 +399,7 @@ function ListingCard({
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="flex items-center gap-1 text-xs font-body text-white/60">
-              <MapPin className="h-3 w-3 text-sealOrange" />
+              <MapPin className="h-3 w-3 text-sealSky" />
               {listing.neighborhood} · {listing.walkToCampus} min to SGU
             </div>
             <Link to={`/listings/${listing.id}`}>
@@ -410,7 +410,7 @@ function ListingCard({
           </div>
           <div className="text-right shrink-0">
             <div className="flex items-center justify-end gap-1 text-xs font-body text-white/80">
-              <Star className="h-3 w-3 text-sealOrange" fill="currentColor" />
+              <Star className="h-3 w-3 text-sealAmber" fill="currentColor" />
               {listing.rating}
             </div>
             <p className="text-[10px] text-white/45 font-body">
@@ -502,18 +502,23 @@ function Toggle({
   );
 }
 
+const BADGE_TONES = {
+  orange: "bg-sealOrange text-white",
+  green: "bg-sealGreen text-white",
+  sky: "bg-sealSky text-sealNavyDeep",
+  light: "bg-white/90 text-sealNavyDeep",
+} as const;
+
 function Badge({
   children,
   tone,
 }: {
   children: ReactNode;
-  tone: "orange" | "light";
+  tone: keyof typeof BADGE_TONES;
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-body font-semibold shadow ${
-        tone === "orange" ? "bg-sealOrange text-white" : "bg-white/90 text-sealNavyDeep"
-      }`}
+      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-body font-semibold shadow ${BADGE_TONES[tone]}`}
     >
       {children}
     </span>

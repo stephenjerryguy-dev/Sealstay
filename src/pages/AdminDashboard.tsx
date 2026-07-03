@@ -104,7 +104,7 @@ export default function AdminDashboard() {
         <aside className="border-b border-white/10 bg-black/20 p-4 lg:border-b-0 lg:border-r">
           <div className="flex items-start justify-between gap-3 lg:block">
             <div>
-              <p className="text-xs font-body text-white/45">// SealStay OS</p>
+              <p className="text-xs font-body text-sealSky/60">// SealStay OS</p>
               <h1 className="mt-1 font-heading text-4xl leading-none tracking-[-1px]">
                 Operations
               </h1>
@@ -189,7 +189,7 @@ function Overview({ stats }: { stats: { total: number; verified: number; avgRent
       </div>
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
         <section className="xl:col-span-2">
-          <p className="mb-2 text-xs font-body text-white/55">// Coverage</p>
+          <p className="mb-2 text-xs font-body text-sealSky/70">// Coverage</p>
           <GrenadaMap listings={LISTINGS} height={460} />
         </section>
         <section className="liquid-glass p-5" style={{ borderRadius: "1.25rem" }}>
@@ -346,7 +346,7 @@ function AuditLog() {
 function Header({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <header className="mb-6">
-      <p className="text-xs font-body text-white/45">// Internal</p>
+      <p className="text-xs font-body text-sealSky/60">// Internal</p>
       <h1 className="mt-1 font-heading text-5xl leading-none tracking-[-1px] text-white">
         {title}
       </h1>

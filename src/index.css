@@ -7,12 +7,13 @@
 html, body, #root { height: 100%; }
 body {
   margin: 0;
-  /* Subtle vertical gradient — deep navy down to slightly warmer navy.
-     Picks up the seal's cap/shirt palette without going pitch black. */
+  /* Teal-navy base from the original sigma palette, with ambient sky-blue
+     and mascot-orange glows so the page never reads black-and-white. */
   background:
-    radial-gradient(1200px 800px at 75% -10%, rgba(255, 106, 26, 0.08), transparent 60%),
-    radial-gradient(1000px 700px at 0% 100%, rgba(40, 60, 110, 0.18), transparent 55%),
-    linear-gradient(180deg, #0a1426 0%, #050a14 100%);
+    radial-gradient(1200px 800px at 75% -10%, rgba(255, 106, 26, 0.14), transparent 60%),
+    radial-gradient(1100px 800px at -10% 30%, rgba(56, 189, 248, 0.12), transparent 55%),
+    radial-gradient(1000px 700px at 50% 110%, rgba(3, 105, 161, 0.22), transparent 60%),
+    linear-gradient(180deg, #0f2638 0%, #0a1520 100%);
   background-attachment: fixed;
   color: #fff;
   font-family: 'Barlow', sans-serif;

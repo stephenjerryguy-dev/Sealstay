@@ -95,7 +95,7 @@ export default function LeaseDNAScanner() {
           className="lg:col-span-1 liquid-glass p-6 flex flex-col"
           style={{ borderRadius: "1.5rem", minHeight: 320 }}
         >
-          <p className="text-xs font-body text-white/70">// Upload</p>
+          <p className="text-xs font-body text-sealSky/80">// Upload</p>
           <h3 className="mt-1 font-heading text-white text-3xl tracking-[-1px] leading-none">
             Your lease
           </h3>
@@ -212,7 +212,7 @@ function ResultPanel() {
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <div className="flex items-center gap-3 flex-wrap">
-          <p className="text-xs font-body text-white/70">// Findings</p>
+          <p className="text-xs font-body text-sealSky/80">// Findings</p>
           <span className="liquid-glass rounded-full px-2.5 py-1 text-[11px] font-body text-white">
             {risks} risk
           </span>

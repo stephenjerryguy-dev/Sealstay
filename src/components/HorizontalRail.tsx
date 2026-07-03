@@ -34,7 +34,7 @@ export default function HorizontalRail({
   return (
     <section
       ref={ref}
-      className={`relative w-screen bg-sealNavyDeep ${className}`}
+      className={`relative w-screen ${className}`}
       style={{ height: `${trackVh * 100}vh` }}
     >
       <div className="sticky top-0 w-screen h-screen overflow-hidden flex flex-col">
