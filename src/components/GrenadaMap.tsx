@@ -8,20 +8,25 @@ import { priceLabel, type Listing } from "../data/listings";
 // Approximate centroid of southern Grenada (SGU + Lance aux Épines + Grand Anse)
 const GRENADA_CENTER: [number, number] = [12.018, -61.748];
 
-// Custom orange pin in HTML (matches the seal mascot)
-function pinIcon(label: string) {
+// Custom pins: solid orange = exact property pin (agency geocode);
+// muted dashed = approximate area pin, price prefixed with ~ so nobody
+// reads a jittered marker as a street address.
+function pinIcon(label: string, exact: boolean) {
+  const style = exact
+    ? `background:#ff6a1a;color:white;border:1px solid rgba(255,255,255,0.3);`
+    : `background:rgba(15,38,56,0.88);color:#7dd3fc;border:1px dashed rgba(125,211,252,0.55);`;
   return divIcon({
     className: "sealstay-pin",
     iconSize: [56, 28],
     iconAnchor: [28, 28],
     html: `<div style="
       display:inline-flex;align-items:center;justify-content:center;
-      background:#ff6a1a;color:white;
+      ${style}
       font-family:'Barlow',sans-serif;font-weight:600;font-size:12px;
       padding:4px 10px;border-radius:9999px;
-      box-shadow:0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+      box-shadow:0 2px 6px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
       white-space:nowrap;letter-spacing:-.01em;
-    ">${label}</div>`,
+    ">${exact ? "" : "~"}${label}</div>`,
   });
 }
 
@@ -73,7 +78,7 @@ export default function GrenadaMap({
         center={highlightId && visible[0] ? [visible[0].lat, visible[0].lng] : center}
         zoom={highlightId ? 16 : zoom}
         scrollWheelZoom
-        style={{ width: "100%", height: "100%", background: "#0a1426" }}
+        style={{ width: "100%", height: "100%", background: "#0f1a26" }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -105,7 +110,10 @@ export default function GrenadaMap({
           <Marker
             key={l.id}
             position={[l.lat, l.lng]}
-            icon={pinIcon(l.priceDisplay ? "Contact" : `$${l.price.toLocaleString()}`)}
+            icon={pinIcon(
+              l.priceDisplay ? "Contact" : `$${l.price.toLocaleString()}`,
+              l.coordinatePrecision === "exact",
+            )}
           >
             <Popup>
               <div style={{ minWidth: 200 }}>

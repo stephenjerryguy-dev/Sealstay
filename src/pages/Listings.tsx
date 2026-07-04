@@ -6,11 +6,8 @@ import {
   CheckCircle2,
   Heart,
   MapPin,
-  RefreshCw,
   Search,
   SlidersHorizontal,
-  Star,
-  Users,
   X,
 } from "lucide-react";
 import PageShell from "../components/PageShell";
@@ -30,7 +27,7 @@ const ROOM_TYPES: Listing["roomType"][] = [
   "3BR+ House",
 ];
 
-type SortBy = "featured" | "price-asc" | "price-desc" | "rating" | "campus";
+type SortBy = "featured" | "price-asc" | "price-desc" | "campus";
 
 export default function Listings() {
   const [searchParams] = useSearchParams();
@@ -43,7 +40,6 @@ export default function Listings() {
     Number(searchParams.get("budget")) || 5000,
   );
   const [sealApprovedOnly, setSealApprovedOnly] = useState(false);
-  const [availableOnly, setAvailableOnly] = useState(false);
   const [exactPinsOnly, setExactPinsOnly] = useState(false);
   const [sortBy, setSortBy] = useState<SortBy>("featured");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -75,7 +71,6 @@ export default function Listings() {
         (listing.price === 0 || listing.price <= maxPrice) &&
         (selectedTypes.length === 0 || selectedTypes.includes(listing.roomType)) &&
         (!sealApprovedOnly || listing.sealApproved) &&
-        (!availableOnly || listing.available || listing.hasLeaseBreak) &&
         (!exactPinsOnly || listing.coordinatePrecision === "exact")
       );
     });
@@ -83,12 +78,10 @@ export default function Listings() {
     return result.sort((a, b) => {
       if (sortBy === "price-asc") return comparablePrice(a) - comparablePrice(b);
       if (sortBy === "price-desc") return comparablePrice(b) - comparablePrice(a);
-      if (sortBy === "rating") return b.rating - a.rating;
       if (sortBy === "campus") return a.walkToCampus - b.walkToCampus;
       return Number(b.featured) - Number(a.featured) || a.price - b.price;
     });
   }, [
-    availableOnly,
     exactPinsOnly,
     hood,
     maxPrice,
@@ -104,7 +97,6 @@ export default function Listings() {
     selectedTypes.length > 0 ||
     maxPrice < 5000 ||
     sealApprovedOnly ||
-    availableOnly ||
     exactPinsOnly;
 
   const exactPinCount = LISTINGS.filter((l) => l.coordinatePrecision === "exact").length;
@@ -115,7 +107,6 @@ export default function Listings() {
     setSelectedTypes([]);
     setMaxPrice(5000);
     setSealApprovedOnly(false);
-    setAvailableOnly(false);
     setExactPinsOnly(false);
     setSortBy("featured");
   }
@@ -242,11 +233,6 @@ export default function Listings() {
                 onChange={() => setSealApprovedOnly((v) => !v)}
               />
               <Toggle
-                label="Available or transfer"
-                checked={availableOnly}
-                onChange={() => setAvailableOnly((v) => !v)}
-              />
-              <Toggle
                 label="Exact map pins only"
                 checked={exactPinsOnly}
                 onChange={() => setExactPinsOnly((v) => !v)}
@@ -277,7 +263,6 @@ export default function Listings() {
               <option value="featured">Featured first</option>
               <option value="price-asc">Price: low to high</option>
               <option value="price-desc">Price: high to low</option>
-              <option value="rating">Top rated</option>
               <option value="campus">Closest to SGU</option>
             </select>
           </div>
@@ -360,18 +345,13 @@ function ListingCard({
               Seal Approved
             </Badge>
           )}
-          {listing.claimStatus === "unclaimed" && (
-            <Badge tone="light">
-              <AlertCircle className="h-3 w-3" />
-              Unclaimed
-            </Badge>
-          )}
-          {listing.hasLeaseBreak && (
-            <Badge tone="sky">
-              <RefreshCw className="h-3 w-3" />
-              Transfer
-            </Badge>
-          )}
+          {listing.mediaStatus !== "agency-source-photo" &&
+            listing.mediaStatus !== "owner-provided" && (
+              <Badge tone="light">
+                <AlertCircle className="h-3 w-3" />
+                Stock photo
+              </Badge>
+            )}
         </div>
 
         <button
@@ -383,16 +363,6 @@ function ListingCard({
           <Heart className="h-4 w-4" fill={saved ? "currentColor" : "none"} />
         </button>
 
-        {!listing.available && (
-          <div className="absolute inset-x-0 bottom-0 bg-black/55 backdrop-blur-sm px-4 py-2 text-xs font-body text-white flex items-center justify-between gap-3">
-            <span>
-              {listing.hasLeaseBreak ? "Lease transfer available" : `Available ${listing.availableFrom}`}
-            </span>
-            <Link to="/lease-relief" className="text-sealOrange hover:text-white">
-              Join →
-            </Link>
-          </div>
-        )}
       </div>
 
       <div className="p-5 flex-1 flex flex-col">
@@ -410,11 +380,11 @@ function ListingCard({
           </div>
           <div className="text-right shrink-0">
             <div className="flex items-center justify-end gap-1 text-xs font-body text-white/80">
-              <Star className="h-3 w-3 text-sealAmber" fill="currentColor" />
-              {listing.rating}
+              <CheckCircle2 className="h-3 w-3 text-sealGreen" />
+              Source-linked
             </div>
             <p className="text-[10px] text-white/45 font-body">
-              {listing.reviewCount} reviews
+              checked {listing.sourceLastChecked}
             </p>
           </div>
         </div>
@@ -439,12 +409,6 @@ function ListingCard({
             <MapPin className="h-3 w-3" />
             {listing.coordinatePrecision === "exact" ? "Exact pin" : "Approximate pin"}
           </span>
-          {listing.waitlistCount > 0 && (
-            <span className="inline-flex items-center gap-1">
-              <Users className="h-3 w-3" />
-              {listing.waitlistCount} watching
-            </span>
-          )}
         </div>
 
         <div className="mt-auto pt-5 flex items-center justify-between gap-3">

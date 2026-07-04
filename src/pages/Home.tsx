@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { ArrowUpRight, Play, Clock, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import FadingVideo from "../components/FadingVideo";
+import { LISTINGS } from "../data/listings";
 import BlurText from "../components/BlurText";
 import Navbar from "../components/Navbar";
 import HorizontalRail from "../components/HorizontalRail";
@@ -92,7 +93,7 @@ function Hero() {
               New
             </span>
             <span className="text-sm text-white/90 font-body">
-              Spring 2026 SGU intake bookings now open
+              Fall 2026 SGU intake — housing search open
             </span>
           </motion.div>
 
@@ -135,13 +136,13 @@ function Hero() {
           <motion.div {...blur(1.3)} className="flex items-stretch gap-4 mt-8">
             <StatCard
               icon={<Clock className="w-7 h-7" />}
-              value="6 Min"
-              label="Avg. walk to SGU campus"
+              value="4 Min"
+              label="Walk to SGU from True Blue stays"
             />
             <StatCard
               icon={<Globe className="w-7 h-7" />}
-              value="2,400+"
-              label="Med-school students placed"
+              value={`${LISTINGS.length}`}
+              label="Source-linked listings live now"
             />
           </motion.div>
         </div>

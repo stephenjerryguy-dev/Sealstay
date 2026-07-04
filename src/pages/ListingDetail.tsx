@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import type { ComponentType } from "react";
-import { AlertCircle, CheckCircle2, RefreshCw, Star, Users } from "lucide-react";
+import { AlertCircle, CheckCircle2, RefreshCw } from "lucide-react";
 import PageShell from "../components/PageShell";
 import GrenadaMap from "../components/GrenadaMap";
 import { LISTINGS, priceLabel } from "../data/listings";
@@ -76,12 +76,12 @@ export default function ListingDetail() {
           )}
           <div className="grid grid-cols-2 gap-2 text-xs font-body text-white/75">
             <span className="liquid-glass rounded-xl px-3 py-2 inline-flex items-center gap-2">
-              <Star className="h-3.5 w-3.5 text-sealAmber" fill="currentColor" />
-              {listing.rating} ({listing.reviewCount})
+              <CheckCircle2 className="h-3.5 w-3.5 text-sealGreen" />
+              Source-linked
             </span>
             <span className="liquid-glass rounded-xl px-3 py-2 inline-flex items-center gap-2">
-              <Users className="h-3.5 w-3.5 text-sealSky" />
-              {listing.waitlistCount} watching
+              <RefreshCw className="h-3.5 w-3.5 text-sealSky" />
+              Checked {listing.sourceLastChecked}
             </span>
           </div>
           <Link
@@ -161,28 +161,32 @@ export default function ListingDetail() {
               tone={listing.claimStatus === "claimed" ? "good" : "warn"}
             />
             <TruthRow
-              icon={listing.available || listing.hasLeaseBreak ? CheckCircle2 : RefreshCw}
+              icon={CheckCircle2}
               label="Availability"
-              value={
-                listing.available
-                  ? "Available now"
-                  : listing.hasLeaseBreak
-                  ? "Lease transfer path"
-                  : `Available ${listing.availableFrom}`
-              }
-              tone={listing.available || listing.hasLeaseBreak ? "good" : "neutral"}
+              value={`Listed as available by the source agency (${listing.sourceLastChecked})`}
+              tone="good"
             />
             <TruthRow
-              icon={listing.mediaStatus === "owner-provided" ? CheckCircle2 : AlertCircle}
+              icon={
+                listing.mediaStatus === "owner-provided" || listing.mediaStatus === "agency-source-photo"
+                  ? CheckCircle2
+                  : AlertCircle
+              }
               label="Public media"
               value={
                 listing.mediaStatus === "owner-provided"
                   ? "Owner-provided / rights-cleared"
+                  : listing.mediaStatus === "agency-source-photo"
+                  ? "Agency-published photo of this property"
                   : listing.mediaStatus === "generated-replica-needed"
-                  ? "Needs rights-cleared replacement"
-                  : "Rights-cleared placeholder; agent photos not used"
+                  ? "Stock placeholder — source photo is watermarked"
+                  : "Stock placeholder — not the actual unit"
               }
-              tone={listing.mediaStatus === "owner-provided" ? "good" : "warn"}
+              tone={
+                listing.mediaStatus === "owner-provided" || listing.mediaStatus === "agency-source-photo"
+                  ? "good"
+                  : "warn"
+              }
             />
             <TruthRow
               icon={CheckCircle2}
@@ -203,13 +207,17 @@ export default function ListingDetail() {
           className="liquid-glass p-6"
           style={{ borderRadius: "1.25rem" }}
         >
-          <p className="text-xs font-body text-white/70">SealScore</p>
+          <p className="text-xs font-body text-white/70">SealScore · estimate</p>
           <div className="mt-1 flex items-baseline gap-2">
             <span className="font-heading text-white text-5xl tracking-[-1px] leading-none">
               {score.total}
             </span>
             <span className="text-xs font-body text-white/70">/ 100</span>
           </div>
+          <p className="mt-2 text-[11px] font-body font-light text-white/55 leading-snug">
+            Modeled from price, location, and walk time — not yet a field
+            inspection.
+          </p>
           <ul className="mt-4 space-y-2">
             {score.facets.map((f) => (
               <li key={f.label} className="flex items-center gap-3">

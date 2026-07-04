@@ -95,8 +95,11 @@ export default function SealScore() {
         >
           <p className="text-xs font-body text-sealSky/80">// Top scorers</p>
           <h2 className="mt-1 font-heading text-white text-3xl tracking-[-1px] leading-none">
-            Highest-rated rentals
+            Highest-scoring rentals
           </h2>
+          <p className="mt-2 text-[11px] font-body font-light text-white/55">
+            Scores are modeled estimates until field inspections land.
+          </p>
           <ul className="mt-5 flex flex-col gap-3">
             {ranked.map(({ l, score }) => (
               <Link
